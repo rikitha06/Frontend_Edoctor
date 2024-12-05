@@ -1,66 +1,95 @@
 import React, { useState } from "react";
 import axios from "../services/api";
 import "../CSS/AppointmentsPage.css";
+import "../CSS/Modal.css";
 
 function AppointmentsPage() {
   const [doctorId, setDoctorId] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [cancelReason, setCancelReason] = useState("");
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [actionType, setActionType] = useState("");
+  const [isFetching, setIsFetching] = useState(false); // Add this state for fetching status
+  
 
   // Fetch all appointments for a doctor
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get(
-        `/doctor/all-appointments/${doctorId}`
-      );
+      setIsFetching(true); // Set fetching state to true before starting the API call
+      const response = await axios.get(`/doctor/all-appointments/${doctorId}`);
+      
       if (response.data.length === 0) {
-        alert("No appointments found for this doctor.");
+        alert("Currently you have no appointments pending.");
+      } else {
+        setAppointments(response.data);
       }
-      setAppointments(response.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       alert("Failed to fetch appointments. Please check the Doctor ID.");
+    } finally {
+      setIsFetching(false); // Set isFetching to false after fetching is done
     }
   };
 
+
+  const handleFetchAppointments = async () => {
+    fetchAppointments();
+  };
+
+  // Open confirmation modal for action
+  const openConfirmationModal = (appointmentId, action) => {
+    setSelectedAppointment(appointmentId);
+    setActionType(action);
+    setShowConfirmationModal(true);
+  };
+
+  // Close confirmation modal
+  const closeConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setSelectedAppointment(null);
+    setActionType("");
+  };
+
   // Handle confirmation of an appointment
-  const handleConfirmAppointment = async (appointmentId) => {
+  const handleConfirmAppointment = async () => {
     try {
       const response = await axios.put(
-        `/doctor/confirm-appointment/${appointmentId}`
+        `/doctor/confirm-appointment/${selectedAppointment}`
       );
-      alert("Appointment confirmed!");
       fetchAppointments(); // Refresh the list of appointments
+      closeConfirmationModal();
     } catch (error) {
       console.error("Error confirming appointment:", error);
       alert("Failed to confirm appointment.");
+      closeConfirmationModal();
     }
   };
 
   // Handle cancellation of an appointment
-  const handleCancelAppointment = async (appointmentId) => {
-
+  const handleCancelAppointment = async () => {
     if (!cancelReason) {
       alert("Please provide a reason for cancellation.");
       return;
     }
     try {
       const response = await axios.put(
-        `/doctor/cancel-appointment/${appointmentId}`,
-        cancelReason
+        `/doctor/cancel-appointment/${selectedAppointment}`,
+        { cancelReason }
       );
-      alert("Appointment cancelled successfully!");
       setCancelReason(""); // Clear the cancel reason input
       fetchAppointments(); // Refresh the list of appointments
+      closeConfirmationModal();
     } catch (error) {
       console.error("Error cancelling appointment:", error);
       alert("Failed to cancel appointment.");
+      closeConfirmationModal();
     }
   };
 
   return (
     <div className="appointments-page">
-      <h2>Doctor Appointments</h2>
+      <h2>My Appointments</h2>
 
       {/* Doctor ID input to fetch appointments */}
       <div className="fetch-section">
@@ -70,11 +99,13 @@ function AppointmentsPage() {
           value={doctorId}
           onChange={(e) => setDoctorId(e.target.value)}
         />
-        <button onClick={fetchAppointments}>Fetch Appointments</button>
+        <button onClick={handleFetchAppointments}>Fetch Appointments</button>
       </div>
 
       {/* Display appointments in a table */}
-      {appointments.length > 0 ? (
+      {isFetching ? (
+        <p>Loading appointments...</p> // Show loading message while fetching
+      ) : appointments.length > 0 ? (
         <table>
           <thead>
             <tr>
@@ -97,10 +128,18 @@ function AppointmentsPage() {
                 <td>
                   {appointment.status === "Pending" && (
                     <>
-                      <button onClick={() => handleConfirmAppointment(appointment.appointmentId)}>
+                      <button
+                        onClick={() =>
+                          openConfirmationModal(appointment.appointmentId, "confirm")
+                        }
+                      >
                         Confirm
                       </button>
-                      <button onClick={() => handleCancelAppointment(appointment.appointmentId)}>
+                      <button
+                        onClick={() =>
+                          openConfirmationModal(appointment.appointmentId, "cancel")
+                        }
+                      >
                         Cancel
                       </button>
                     </>
@@ -110,28 +149,37 @@ function AppointmentsPage() {
             ))}
 
             <tr>
-                <th colSpan={6}>
-                    {/* Input for cancellation reason */}
-                    <div className="cancel-reason">
-                    <textarea
-                        value={cancelReason}
-                        onChange={(e) => setCancelReason(e.target.value)}
-                        placeholder="Provide reason for cancellation"
-                    />
-                    </div>
-                </th>
+              <th colSpan={6}>
+                {/* Input for cancellation reason */}
+                <div className="cancel-reason">
+                  <textarea
+                    value={cancelReason}
+                    onChange={(e) => setCancelReason(e.target.value)}
+                    placeholder="Provide reason for cancellation"
+                  />
+                </div>
+              </th>
             </tr>
-
           </tbody>
         </table>
-      ) : doctorId && appointments.length === 0 ? (
-        <div>
-          <p>No appointments found for this doctor. Please try again later.</p>
-        </div>
       ) : null}
 
-        
-      
+      {/* Confirmation Modal */}
+      {showConfirmationModal && (
+        <div className="confirmation-modal">
+          <div className="modal-content">
+            <p>
+              Are you sure you want to {actionType} this appointment?
+            </p>
+            <div className="modal-actions">
+              <button onClick={actionType === "confirm" ? handleConfirmAppointment : handleCancelAppointment}>
+                Yes
+              </button>
+              <button onClick={closeConfirmationModal}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

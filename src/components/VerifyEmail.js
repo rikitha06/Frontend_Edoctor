@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../CSS/VerifyEmail.css'; // Updated CSS file for verify-email page
+import '../CSS/VerifyEmail.css';
 
 function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
   const [verificationCode, setVerificationCode] = useState('');
-  const username = location.state?.username || ''; // Get username from navigation state
+  const username = location.state?.username || '';
 
   const handleVerify = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ function VerifyEmail() {
 
       if (response.ok) {
         alert('Email verified successfully! Redirecting to Login...');
-        navigate('/login'); // Redirect to login page after successful verification
+        navigate('/login');
       } else {
         alert('Verification failed.');
       }

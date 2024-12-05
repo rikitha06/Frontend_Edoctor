@@ -1,29 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
-import '../CSS/ForgotPassword.css'
+import api from '../services/api'; // Ensure this is correctly configured for Axios
+import '../CSS/ForgotPassword.css';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post('/reset-password', null, { params: { email } });
-      setMessage(response.data);
 
+    try {
+      setLoading(true);
+
+      // Sending POST request using Axios
+      const response = await api.post('/auth/reset-password', null, {
+        params: { email },
+      });
+
+      // If successful, set a success message
+      setMessage(response.data || 'Reset password link sent successfully!');
+
+      // Redirect after 2 seconds
       setTimeout(() => {
         navigate('/reset-password', { state: { email } });
       }, 2000);
     } catch (error) {
-      setMessage(error.response?.data || 'Failed to send reset password token');
+      // Handle error response, ensuring we avoid rendering objects directly
+      const errorMessage =
+        error.response?.data?.error || 'Failed to send reset password token';
+      setMessage({ error: errorMessage });
+    }
+    finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className='forgot-password-container'>
+    <div className="forgot-password-container">
       <h1>Forgot Password</h1>
       <form onSubmit={handleForgotPassword}>
         <div className="form-group">
@@ -36,9 +52,21 @@ function ForgotPassword() {
             required
           />
         </div>
-        <button className="btn-primary" type="submit">Send Reset Link</button>
+        <button className="btn-primary" 
+          type="submit"
+          disabled={loading}>
+            {loading? "OTP is being sent...": "Send OTP" }
+        </button>
       </form>
-      {message && <p className="message">{message}</p>}
+
+      {message && (
+        <p className="message">
+          {/* Safely handle both strings and objects */}
+          {typeof message === 'string'
+            ? message
+            : `Error: ${message.error || 'Unknown Error'}`}
+        </p>
+      )}
     </div>
   );
 }

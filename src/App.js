@@ -6,8 +6,7 @@ import VerifyEmail from './components/VerifyEmail';
 import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import Profile from './components/Profile';
-import Navbar from './components/Navbar';
+import Doctor_Profile from './components/Doctor_Profile';
 import DoctorDashboard from './components/DoctorDashboard';
 import AvailabilityPage from './components/AvailabilityPage';
 import AppointmentsPage from './components/AppointmentsPage';
@@ -25,8 +24,7 @@ function App() {
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/availability" element={<AvailabilityPage/>}/>
         <Route path="/appointments" element={<AppointmentsPage />} />
-        <Route path="/navbar" element={<Navbar/>} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/doctor-profile" element={<Doctor_Profile />} />
       </Routes>
     </Router>
   );

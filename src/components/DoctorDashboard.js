@@ -11,7 +11,7 @@ function DoctorDashboard() {
       <nav className="dashboard-navbar">
         <ul>
           <li>
-            <Link to="/profile">Profile</Link>
+            <Link to="/doctor-profile">Profile</Link>
           </li>
           <li>
             <Link to="/availability">Availability</Link>
@@ -20,7 +20,7 @@ function DoctorDashboard() {
             <Link to="/appointments">Appointments</Link>
           </li>
           <li>
-            <Link to="/logout">Logout</Link>
+            <Link to="/">Logout</Link>
           </li>
         </ul>
       </nav>

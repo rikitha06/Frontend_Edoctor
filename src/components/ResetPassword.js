@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Ensure this is correctly configured
-import '../CSS/ResetPassword.css'; // Include styles if available
+import api from '../services/api'; // Ensure this is configured correctly
+import '../CSS/ResetPassword.css';
 
 function ResetPassword() {
   const location = useLocation();
@@ -10,7 +10,7 @@ function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState(''); // For styling success or error messages
+  const [messageType, setMessageType] = useState('');
   const email = location.state?.email || '';
 
   const handleResetPassword = async (e) => {
@@ -23,18 +23,22 @@ function ResetPassword() {
     }
 
     try {
-      const response = await api.post('/reset-password/confirm', null, {
+      // Send API request with Axios
+      const response = await api.post('/auth/reset-password/confirm', null, {
         params: { email, token: otp, newPassword },
       });
+
       setMessage('Password reset successfully! Redirecting to login...');
       setMessageType('success');
 
-      // Redirect to login after a short delay
+      // Redirect after success
       setTimeout(() => {
         navigate('/login');
       }, 2000);
     } catch (error) {
-      setMessage(error.response?.data || 'Password reset failed');
+      const errorMessage =
+        error.response?.data?.error || 'Password reset failed';
+      setMessage(errorMessage);
       setMessageType('error');
     }
   };
@@ -73,8 +77,11 @@ function ResetPassword() {
             required
           />
         </div>
-        <button className="btn-primary" type="submit">Reset Password</button>
+        <button className="btn-primary" type="submit">
+          Reset Password
+        </button>
       </form>
+
       {message && (
         <p className={`message ${messageType}`}>
           {message}

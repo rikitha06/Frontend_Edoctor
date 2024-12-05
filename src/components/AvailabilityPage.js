@@ -47,6 +47,7 @@ function AvailabilityPage() {
           formData
         );
         alert("Availability updated successfully!");
+        setDoctorId(response.data.doctorId);
         setEditAvailabilityId(null);
       } else {
         // Add new availability
@@ -55,6 +56,7 @@ function AvailabilityPage() {
           formData
         );
         alert("Availability added successfully!");
+        setDoctorId(response.data.doctorId);
       }
       setFormData({ doctorId: "", fromDate: "", endDate: "" });
       fetchAvailabilities(); // Refresh the table

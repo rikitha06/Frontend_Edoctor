@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import axios from "../services/api";
-import "../CSS/Profile.css";
+import "../CSS/Doctor_Profile.css";
 
 function Profile() {
   const [hasProfile, setHasProfile] = useState(false);
   const [doctorId, setDoctorId] = useState("");
   const [doctorProfile, setDoctorProfile] = useState(null);
   const [formData, setFormData] = useState({
+    doctorId: "",
     name: "",
     specialization: "",
     location: "",
@@ -16,6 +17,7 @@ function Profile() {
     password: "",
     chargedPerVisit: "",
   });
+  const [loading, setLoading] = useState(false);
 
   // Fetch Doctor Profile by ID
   const fetchProfile = async () => {
@@ -39,6 +41,8 @@ function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
+
       if (doctorProfile) {
         // Update existing profile
         const response = await axios.put(`/doctor/updateProfile?doctorId=${doctorId}`, doctorProfile);
@@ -48,6 +52,7 @@ function Profile() {
         // Add new profile
         const response = await axios.post("/doctor/addProfile", formData);
         alert("Profile added successfully! \n Check mail for doctorId");
+
         setDoctorProfile(response.data); // Set the new profile
         setHasProfile(true); // Switch to profile view
         setFormData({
@@ -60,10 +65,14 @@ function Profile() {
           password: "",
           chargedPerVisit: "",
         });
+        setDoctorId(response.data.doctorId);
       }
     } catch (error) {
       alert("Error saving profile. Please try again.");
       console.error("Error submitting profile:", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -171,7 +180,10 @@ function Profile() {
                 required
               />
             </div>
-            <button type="submit">Add Profile</button>
+            <button type="submit"
+              disabled={loading}>
+              {loading ? 'Adding Profile...' : 'Add Profile'}
+            </button>
           </form>
         </>
       )}
@@ -181,6 +193,17 @@ function Profile() {
         <>
           <h3>Profile Details</h3>
           <form onSubmit={handleSubmit}>
+          <div>
+              <label>Doctor ID:</label>
+              <input
+                type="text"
+                name="doctorId"
+                value={doctorProfile.doctorId || ""}
+                onChange={(e) =>
+                  setDoctorProfile({ ...doctorProfile, doctorId: e.target.value })
+                }
+              />
+            </div>
             <div>
               <label>Name:</label>
               <input
