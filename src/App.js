@@ -8,8 +8,10 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import Doctor_Profile from './components/Doctor_Profile';
 import DoctorDashboard from './components/DoctorDashboard';
+import PatientDashboard from './components/PatientDashboard';
 import AvailabilityPage from './components/AvailabilityPage';
 import AppointmentsPage from './components/AppointmentsPage';
+import AddPatient from './components/AddPatient';
 
 function App() {
   return (
@@ -22,9 +24,11 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+        <Route path="/patient-dashboard" element={<PatientDashboard />} />
         <Route path="/availability" element={<AvailabilityPage/>}/>
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/doctor-profile" element={<Doctor_Profile />} />
+        <Route path="/add-patient" element={<AddPatient />} />
       </Routes>
     </Router>
   );
