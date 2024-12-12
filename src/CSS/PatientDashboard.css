@@ -10,7 +10,9 @@
     color: white;
     padding: 20px;
   }
-  
+  h1 {
+    color: aliceblue;
+  }
   .dashboard-navbar {
     background-color: #34495e;
     padding: 10px 0;

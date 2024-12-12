@@ -14,6 +14,12 @@ function PatientDashboard() {
             <Link to="/add-patient">Profile</Link>
           </li>
           <li>
+            <Link to="/view-doctors">View Doctors</Link>
+          </li>
+          <li>
+            <Link to="/make-appointment">Make Appointment</Link>
+          </li>
+          <li>
             <Link to="/">Logout</Link>
           </li>
         </ul>

@@ -12,6 +12,8 @@ import PatientDashboard from './components/PatientDashboard';
 import AvailabilityPage from './components/AvailabilityPage';
 import AppointmentsPage from './components/AppointmentsPage';
 import AddPatient from './components/AddPatient';
+import MakeAppointment from './components/MakeAppointment';
+import ViewDoctors from './components/ViewDoctors';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/doctor-profile" element={<Doctor_Profile />} />
         <Route path="/add-patient" element={<AddPatient />} />
+        <Route path="/make-appointment" element={<MakeAppointment />} />
+        <Route path="/view-doctors" element={<ViewDoctors />} />
       </Routes>
     </Router>
   );

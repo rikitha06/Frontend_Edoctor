@@ -17,7 +17,7 @@ function Home() {
             </div>
         </header>
         <section className="features-section">
-            <h2>Why Choose Us?</h2>
+            <h2 >Why Choose Us?</h2>
             <div className="features">
             <div className="feature">
                 <h3>Easy Scheduling</h3>
