@@ -14,6 +14,9 @@ import AppointmentsPage from './components/AppointmentsPage';
 import AddPatient from './components/AddPatient';
 import MakeAppointment from './components/MakeAppointment';
 import ViewDoctors from './components/ViewDoctors';
+import UpdateAppointment from "./components/UpdateAppointment";
+import CancelAppointment from "./components/CancelAppointment";
+import PaymentMethod from "./components/Payment";
 
 function App() {
   return (
@@ -33,6 +36,9 @@ function App() {
         <Route path="/add-patient" element={<AddPatient />} />
         <Route path="/make-appointment" element={<MakeAppointment />} />
         <Route path="/view-doctors" element={<ViewDoctors />} />
+        <Route path="/update-appointment" element={<UpdateAppointment />} />
+        <Route path="/cancel-appointment" element={<CancelAppointment />} />
+        <Route path="/payments" element={<PaymentMethod />} />
       </Routes>
     </Router>
   );
