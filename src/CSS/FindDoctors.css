@@ -1,0 +1,75 @@
+.find-doctors-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.fetch-options {
+  margin-bottom: 20px;
+}
+
+.fetch-options button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.search-section {
+  margin-bottom: 20px;
+}
+
+.search-section input {
+  padding: 8px;
+  width: 70%;
+  margin-right: 10px;
+}
+
+.search-section button {
+  padding: 8px 15px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.doctor-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.doctor-card {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 30%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.doctor-card p {
+  margin: 5px 0;
+}
+
+.doctor-card button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.no-results {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}

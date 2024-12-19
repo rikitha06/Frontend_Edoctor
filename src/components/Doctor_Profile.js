@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../services/api";
 import "../CSS/Doctor_Profile.css";
 
@@ -7,29 +7,30 @@ function Profile() {
   const [doctorId, setDoctorId] = useState("");
   const [doctorProfile, setDoctorProfile] = useState(null);
   const [formData, setFormData] = useState({
-    doctorId: "",
     name: "",
     specialization: "",
     location: "",
     hospitalName: "",
     mobileNo: "",
-    email: "",
-    password: "",
     chargedPerVisit: "",
   });
   const [loading, setLoading] = useState(false);
+  const username = localStorage.getItem("username");
 
   // Fetch Doctor Profile by ID
   const fetchProfile = async () => {
-    try {
-      const response = await axios.get(`/doctor/viewProfile?doctorId=${doctorId}`);
-      setDoctorProfile(response.data);
-      setHasProfile(true); // Show profile section
-    } catch (error) {
-      alert("Profile not found. Please check the Doctor ID.");
-      console.error("Error fetching profile:", error);
+    if(username) {
+      try {
+        const response = await axios.get(`/doctor/${username}/viewProfile`);
+        setDoctorProfile(response.data);
+        setHasProfile(true); // Show profile section
+      } catch (error) {
+        alert("Profile not found. Please check the Doctor ID.");
+        console.error("Error fetching profile:", error);
+      }
     }
   };
+
 
   // Handle Form Input Changes
   const handleInputChange = (e) => {
@@ -44,15 +45,14 @@ function Profile() {
       setLoading(true);
 
       if (doctorProfile) {
-        // Update existing profile
-        const response = await axios.put(`/doctor/updateProfile?doctorId=${doctorId}`, doctorProfile);
+        // Update existing profile (skip email and password)
+        const response = await axios.put(`/doctor/${username}/updateProfile`, formData);
         alert("Profile updated successfully!");
         setDoctorProfile(response.data); // Update profile state
       } else {
         // Add new profile
-        const response = await axios.post("/doctor/addProfile", formData);
-        alert("Profile added successfully! \n Check mail for doctorId");
-
+        const response = await axios.post(`/doctor/${username}/addProfile`, formData);
+        alert("Profile added successfully! Check mail for doctorId");
         setDoctorProfile(response.data); // Set the new profile
         setHasProfile(true); // Switch to profile view
         setFormData({
@@ -61,8 +61,6 @@ function Profile() {
           location: "",
           hospitalName: "",
           mobileNo: "",
-          email: "",
-          password: "",
           chargedPerVisit: "",
         });
         setDoctorId(response.data.doctorId);
@@ -70,11 +68,17 @@ function Profile() {
     } catch (error) {
       alert("Error saving profile. Please try again.");
       console.error("Error submitting profile:", error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Fetch doctor profile if doctorId is already set
+    if (username) {
+      fetchProfile();
+    }
+  }, [doctorId]);
 
   return (
     <div className="profile-container">
@@ -83,21 +87,6 @@ function Profile() {
       {/* If no profile exists, show Add Profile or Fetch Profile section */}
       {!doctorProfile && (
         <>
-          {!hasProfile && (
-            <div className="fetch-profile-section">
-              <h3>Already have a profile?</h3>
-              <div>
-                <label>Enter Doctor ID:</label>
-                <input
-                  type="text"
-                  value={doctorId}
-                  onChange={(e) => setDoctorId(e.target.value)}
-                />
-                <button onClick={fetchProfile}>Fetch Profile</button>
-              </div>
-            </div>
-          )}
-
           <h3>Add Profile</h3>
           <form onSubmit={handleSubmit}>
             <div>
@@ -151,26 +140,6 @@ function Profile() {
               />
             </div>
             <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Password:</label>
-              <input
-                type="text"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
               <label>Charged per Visit:</label>
               <input
                 type="text"
@@ -180,8 +149,7 @@ function Profile() {
                 required
               />
             </div>
-            <button type="submit"
-              disabled={loading}>
+            <button type="submit" disabled={loading}>
               {loading ? 'Adding Profile...' : 'Add Profile'}
             </button>
           </form>
@@ -193,15 +161,13 @@ function Profile() {
         <>
           <h3>Profile Details</h3>
           <form onSubmit={handleSubmit}>
-          <div>
+            <div>
               <label>Doctor ID:</label>
               <input
                 type="text"
                 name="doctorId"
                 value={doctorProfile.doctorId || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, doctorId: e.target.value })
-                }
+                disabled
               />
             </div>
             <div>
@@ -256,17 +222,6 @@ function Profile() {
                 value={doctorProfile.mobileNo || ""}
                 onChange={(e) =>
                   setDoctorProfile({ ...doctorProfile, mobileNo: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                name="email"
-                value={doctorProfile.email || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, email: e.target.value })
                 }
               />
             </div>

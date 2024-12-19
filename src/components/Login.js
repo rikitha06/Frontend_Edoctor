@@ -11,26 +11,26 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       // Send POST request to backend
       const response = await api.post('auth/login', { username, password });
+  
+      // Store the username in localStorage
+      localStorage.setItem('username', username);
+  
+      // Extract user data
+      const user = response.data;
 
-      // Extract user data from response
-      const user = response.data; // Assuming backend returns { id, name, role, ... }
-
-      setMessage(`Welcome ${user.name || 'User'}! Redirecting to your dashboard...`);
-
-      // Save user data to localStorage (or Context API/Redux)
-      localStorage.setItem('user', JSON.stringify(user));
-
+      setMessage(`Welcome ${user.name || 'User'}! Redirecting to dashboard...`);
+  
       // Redirect based on user role
       switch (user.role) {
         case 'ADMIN':
           navigate('/admin-dashboard');
           break;
         case 'DOCTOR':
-          navigate('/doctor-dashboard');
+          navigate(`/doctor-dashboard`);  // Send username in the URL path
           break;
         case 'PATIENT':
           navigate('/patient-dashboard');
@@ -79,7 +79,7 @@ function Login() {
           Forgot Password?
         </Link>
         <Link to="/register" className="register-link">
-          Don't have an account?
+          Don't have an account? Register
         </Link>
       </div>
       {message && <p className="message">{message}</p>}

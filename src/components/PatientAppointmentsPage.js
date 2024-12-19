@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "../services/api";
-import "../CSS/AppointmentsPage.css";
+import "../CSS/PatientAppointmentsPage.css";
 import "../CSS/Modal.css";
 
-function AppointmentsPage() {
+function PatientAppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [cancelReason, setCancelReason] = useState("");
+  const [updatedReason, setUpdatedReason] = useState("");  // State for the updated reason
+  const [updatedDateTime, setUpdatedDateTime] = useState("");  // State for the updated date/time
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState("");
+  const [selectedAppointment, setSelectedAppointment] = useState(null); // Initialize with null for better type safety
   const [actionType, setActionType] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false); // Added for process tracking
+  const [isProcessing, setIsProcessing] = useState(false);
   const username = localStorage.getItem("username");
 
-  // Fetch all appointments for a doctor
+  // Fetch all appointments for the patient
   const fetchAppointments = async () => {
     try {
       setIsFetching(true);
-      const response = await axios.get(`/doctor/${username}/viewAppointments`);
-      if (response.data.length === 0) {
-        setAppointments([]);
-      } else {
-        setAppointments(response.data);
-      }
+      const response = await axios.get(`/${username}/patient/viewAppointments`);
+      setAppointments(response.data.length === 0 ? [] : response.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       alert("Failed to fetch appointments. Please try again.");
@@ -36,27 +34,41 @@ function AppointmentsPage() {
     fetchAppointments();
   }, []);
 
-  const openConfirmationModal = (appointmentId, action) => {
+  const openConfirmationModal = (appointmentId, action, appointment) => {
     setSelectedAppointment(appointmentId);
     setActionType(action);
     setShowConfirmationModal(true);
+
+    // Prepopulate the fields with current appointment data for update
+    if (action === "update") {
+      setUpdatedReason(appointment.reason);
+      setUpdatedDateTime(appointment.appointmentDateTime);
+    }
   };
 
   const closeConfirmationModal = () => {
     setShowConfirmationModal(false);
     setSelectedAppointment(null);
     setActionType("");
+    setUpdatedReason(""); // Clear the form fields when closing modal
+    setUpdatedDateTime(""); // Clear the form fields
   };
 
-  const handleConfirmAppointment = async () => {
+  const handleUpdateAppointment = async () => {
     setIsProcessing(true);
     try {
-      await axios.put(`/doctor/confirm-appointment/${selectedAppointment}`);
+      const updatedData = {
+        appointmentDateTime: updatedDateTime,
+        reason: updatedReason,
+      };
+
+      // Call the API to update the appointment with the new data
+      await axios.put(`/patient/updateAppointment/${selectedAppointment}`, updatedData);
       fetchAppointments();
       closeConfirmationModal();
     } catch (error) {
-      console.error("Error confirming appointment:", error);
-      alert("Failed to confirm appointment.");
+      console.error("Error updating appointment:", error);
+      alert("Failed to update appointment.");
       closeConfirmationModal();
     } finally {
       setIsProcessing(false);
@@ -70,7 +82,7 @@ function AppointmentsPage() {
     }
     setIsProcessing(true);
     try {
-      await axios.put(`/doctor/cancel-appointment/${selectedAppointment}?reason=${cancelReason}`);
+      await axios.put(`/patient/cancelAppointment/${selectedAppointment}?reason=${cancelReason}`);
       setCancelReason("");
       fetchAppointments();
       closeConfirmationModal();
@@ -101,9 +113,7 @@ function AppointmentsPage() {
           <thead>
             <tr>
               <th>Appointment ID</th>
-              <th>Patient Name</th>
-              <th>Age</th>
-              <th>Gender</th>
+              <th>Doctor Name</th>
               <th>Reason</th>
               <th>Appointment Date</th>
               <th>Appointment Time</th>
@@ -117,9 +127,7 @@ function AppointmentsPage() {
               return (
                 <tr key={appointment.appointmentId}>
                   <td>{appointment.appointmentId}</td>
-                  <td>{appointment.patient.name}</td>
-                  <td>{appointment.patient.age}</td>
-                  <td>{appointment.patient.gender}</td>
+                  <td>Dr. {appointment.doctor.name}</td>
                   <td>{appointment.reason}</td>
                   <td>{date}</td>
                   <td>{time}</td>
@@ -128,17 +136,13 @@ function AppointmentsPage() {
                     {appointment.status === "Pending" && (
                       <>
                         <button
-                          onClick={() =>
-                            openConfirmationModal(appointment.appointmentId, "confirm")
-                          }
+                          onClick={() => openConfirmationModal(appointment.appointmentId, "update", appointment)}
                           disabled={isProcessing}
                         >
-                          Confirm
+                          Update
                         </button>
                         <button
-                          onClick={() =>
-                            openConfirmationModal(appointment.appointmentId, "cancel")
-                          }
+                          onClick={() => openConfirmationModal(appointment.appointmentId, "cancel", appointment)}
                           disabled={isProcessing}
                         >
                           Cancel
@@ -159,6 +163,7 @@ function AppointmentsPage() {
             <p>
               Are you sure you want to {actionType} this appointment?
             </p>
+
             {actionType === "cancel" && (
               <textarea
                 value={cancelReason}
@@ -166,13 +171,30 @@ function AppointmentsPage() {
                 placeholder="Provide reason for cancellation"
               />
             )}
+
+            {actionType === "update" && (
+              <div className="update-form">
+                <label htmlFor="updatedReason">Reason:</label>
+                <input
+                  id="updatedReason"
+                  type="text"
+                  value={updatedReason}
+                  onChange={(e) => setUpdatedReason(e.target.value)}
+                  placeholder="Enter new reason"
+                />
+                <label htmlFor="updatedDateTime">Appointment Date & Time:</label>
+                <input
+                  id="updatedDateTime"
+                  type="datetime-local"
+                  value={updatedDateTime}
+                  onChange={(e) => setUpdatedDateTime(e.target.value)}
+                />
+              </div>
+            )}
+
             <div className="modal-actions">
               <button
-                onClick={
-                  actionType === "confirm"
-                    ? handleConfirmAppointment
-                    : handleCancelAppointment
-                }
+                onClick={actionType === "update" ? handleUpdateAppointment : handleCancelAppointment}
                 disabled={isProcessing}
               >
                 {isProcessing ? "Processing..." : "Yes"}
@@ -188,4 +210,4 @@ function AppointmentsPage() {
   );
 }
 
-export default AppointmentsPage;
+export default PatientAppointmentsPage;

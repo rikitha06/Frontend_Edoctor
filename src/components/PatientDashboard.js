@@ -1,54 +1,67 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../CSS/PatientDashboard.css";
+import api from "../services/api";
 
 function PatientDashboard() {
-  const [showManageDropdown, setShowManageDropdown] = useState(false);
+  const [patientName, setPatientName] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const toggleDropdown = () => {
-    setShowManageDropdown((prevState) => !prevState);
+  // Fetch patient's profile based on username stored in localStorage
+  useEffect(() => {
+    const username = localStorage.getItem("username");
+    if (username) {
+      api
+        .get(`/${username}/patient/viewProfile`) // API endpoint for patient profile
+        .then((response) => {
+          setPatientName(response.data.name); // Assuming 'name' is the patient's name
+        })
+        .catch((error) => {
+          console.error("Error fetching profile:", error);
+          setPatientName(null);
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Logout function to clear localStorage and redirect
+  const handleLogout = () => {
+    localStorage.removeItem("username");
+    navigate("/login"); // Redirect to login page or home
   };
 
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>Welcome, Patient!</h1>
+        <h1>Welcome{patientName ? `, ${patientName}` : " Patient"}!</h1>
       </header>
 
-      <nav className="dashboard-navbar">
-        <ul>
-          <li>
-            <Link to="/add-patient">Profile</Link>
-          </li>
-          <li>
-            <Link to="/view-doctors">View & Find Doctors</Link>
-          </li>
-          <li className="dropdown">
-            <span onClick={toggleDropdown} className="dropdown-toggle">
-              Manage Appointments
-            </span>
-            {showManageDropdown && (
-              <ul className="dropdown-menu">
-                <li>
-                  <Link to="/make-appointment">Make Appointment</Link>
-                </li>
-                <li>
-                  <Link to="/update-appointment">Update Appointment</Link>
-                </li>
-                <li>
-                  <Link to="/cancel-appointment">Cancel Appointment</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li>
-            <Link to="/payments">Payments</Link>
-          </li>
-          <li>
-            <Link to="/">Logout</Link>
-          </li>
-        </ul>
-      </nav>
+      {isLoading ? (
+        <p>Loading profile...</p>
+      ) : (
+        <nav className="dashboard-navbar">
+          <ul>
+            <li>
+              <Link to="/add-patient">Profile</Link>
+            </li>
+            <li>
+              <Link to="/find-doctors">Doctors</Link>
+            </li>
+            <li>
+              <Link to="/patient-appointments">Appointments</Link>
+            </li>
+            <li>
+              <Link to="/payments">Payments</Link>
+            </li>
+            <li>
+              <button onClick={handleLogout}>Logout</button>
+            </li>
+          </ul>
+        </nav>
+      )}
     </div>
   );
 }

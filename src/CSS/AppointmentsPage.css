@@ -148,4 +148,8 @@
   .cancel-reason button:hover {
     background-color: #e53935;
   }
+
+  p {
+    text-align: center;
+  }
   

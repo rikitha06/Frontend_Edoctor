@@ -11,9 +11,11 @@ import DoctorDashboard from './components/DoctorDashboard';
 import PatientDashboard from './components/PatientDashboard';
 import AvailabilityPage from './components/AvailabilityPage';
 import AppointmentsPage from './components/AppointmentsPage';
+import PatientAppointmentsPage from './components/PatientAppointmentsPage';
 import AddPatient from './components/AddPatient';
 import MakeAppointment from './components/MakeAppointment';
-import ViewDoctors from './components/ViewDoctors';
+import DoctorDetails from './components/DoctorDetails';
+import FindDoctors from './components/FindDoctors';
 import UpdateAppointment from "./components/UpdateAppointment";
 import CancelAppointment from "./components/CancelAppointment";
 import PaymentMethod from "./components/Payment";
@@ -32,10 +34,12 @@ function App() {
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
         <Route path="/availability" element={<AvailabilityPage/>}/>
         <Route path="/appointments" element={<AppointmentsPage />} />
+        <Route path="/patient-appointments" element={<PatientAppointmentsPage />} />
         <Route path="/doctor-profile" element={<Doctor_Profile />} />
         <Route path="/add-patient" element={<AddPatient />} />
+        <Route path="/doctor-details/:doctorId" element={<DoctorDetails />} />
         <Route path="/make-appointment" element={<MakeAppointment />} />
-        <Route path="/view-doctors" element={<ViewDoctors />} />
+        <Route path="/find-doctors" element={<FindDoctors />} />
         <Route path="/update-appointment" element={<UpdateAppointment />} />
         <Route path="/cancel-appointment" element={<CancelAppointment />} />
         <Route path="/payments" element={<PaymentMethod />} />
