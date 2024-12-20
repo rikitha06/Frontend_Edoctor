@@ -6,10 +6,10 @@ import "../CSS/Modal.css";
 function PatientAppointmentsPage() {
   const [appointments, setAppointments] = useState([]);
   const [cancelReason, setCancelReason] = useState("");
-  const [updatedReason, setUpdatedReason] = useState("");  // State for the updated reason
-  const [updatedDateTime, setUpdatedDateTime] = useState("");  // State for the updated date/time
+  const [updatedReason, setUpdatedReason] = useState(""); 
+  const [updatedDateTime, setUpdatedDateTime] = useState("");  
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null); // Initialize with null for better type safety
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [actionType, setActionType] = useState("");
   const [isFetching, setIsFetching] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -29,7 +29,6 @@ function PatientAppointmentsPage() {
     }
   };
 
-  // Automatically fetch appointments on page load
   useEffect(() => {
     fetchAppointments();
   }, []);
@@ -39,7 +38,6 @@ function PatientAppointmentsPage() {
     setActionType(action);
     setShowConfirmationModal(true);
 
-    // Prepopulate the fields with current appointment data for update
     if (action === "update") {
       setUpdatedReason(appointment.reason);
       setUpdatedDateTime(appointment.appointmentDateTime);
@@ -50,20 +48,16 @@ function PatientAppointmentsPage() {
     setShowConfirmationModal(false);
     setSelectedAppointment(null);
     setActionType("");
-    setUpdatedReason(""); // Clear the form fields when closing modal
-    setUpdatedDateTime(""); // Clear the form fields
+    setUpdatedReason(""); 
+    setUpdatedDateTime(""); 
   };
 
   const handleUpdateAppointment = async () => {
     setIsProcessing(true);
     try {
-      const updatedData = {
-        appointmentDateTime: updatedDateTime,
-        reason: updatedReason,
-      };
-
-      // Call the API to update the appointment with the new data
-      await axios.put(`/patient/updateAppointment/${selectedAppointment}`, updatedData);
+      const updatedData = { appointmentDateTime: updatedDateTime, reason: updatedReason };
+      await axios.put(`/${username}/patient/updateAppointment/${selectedAppointment}`, updatedData);
+      alert("Appointment updated successfully.");
       fetchAppointments();
       closeConfirmationModal();
     } catch (error) {
@@ -82,7 +76,7 @@ function PatientAppointmentsPage() {
     }
     setIsProcessing(true);
     try {
-      await axios.put(`/patient/cancelAppointment/${selectedAppointment}?reason=${cancelReason}`);
+      await axios.put(`/${username}/patient/cancelAppointment/${selectedAppointment}?reason=${cancelReason}`);
       setCancelReason("");
       fetchAppointments();
       closeConfirmationModal();
@@ -92,6 +86,52 @@ function PatientAppointmentsPage() {
       closeConfirmationModal();
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handlePayNow = async (appointmentId) => {
+    try {
+      // Call the backend to initiate payment
+      const response = await axios.post(`/${username}/payments/initiate/${appointmentId}`);
+      
+      // Fetch the order ID and amount from the response
+      const { orderId, amount } = response.data;
+  
+      // Configure Razorpay payment options
+      const options = {
+        key: "rzp_test_A3WY0WOJLejK3e", // Razorpay test key
+        amount: amount, // Amount in paise, replace with actual appointment fee
+        currency: "INR",
+        order_id: orderId,
+        handler: async function (response) {
+          const payment_id = response.razorpay_payment_id;
+          // Verify payment after the user completes payment
+          await verifyPayment(appointmentId, payment_id);
+        },
+        theme: {
+          color: "#F37254",
+        },
+      };
+  
+      // Open Razorpay payment modal
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+      alert("Failed to initiate payment.");
+    }
+  };
+  
+
+  const verifyPayment = async (appointmentId, paymentId) => {
+    try {
+      // Call the backend to verify the payment
+      const response = await axios.post(`/${username}/payments/verify/${appointmentId}?paymentId=${paymentId}`);
+      alert(response.data); // Show success or failure message
+      fetchAppointments(); // Reload appointments after payment verification
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      alert("Payment verification failed.");
     }
   };
 
@@ -133,6 +173,18 @@ function PatientAppointmentsPage() {
                   <td>{time}</td>
                   <td>{appointment.status}</td>
                   <td>
+                    {/* Show "Pay Now" if the appointment is confirmed and not paid */}
+                    {appointment.status === "Confirmed" && !appointment.paid && (
+                      <button onClick={() => handlePayNow(appointment.appointmentId)} disabled={isProcessing}>
+                        Pay Now
+                      </button>
+                    )}
+
+                    {/* Show a tick or message if the appointment is paid */}
+                    {appointment.paid && (
+                      <span>✔ Paid - Go to Payments section to download invoice</span>
+                    )}
+
                     {appointment.status === "Pending" && (
                       <>
                         <button

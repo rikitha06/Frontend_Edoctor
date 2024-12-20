@@ -119,9 +119,7 @@ function FindDoctors() {
               </Link>
             </div>
           ))
-        ) : (
-          <p className="no-results">No doctors found. Try another search option.</p>
-        )}
+        ) : null}
       </div>
     </div>
   );

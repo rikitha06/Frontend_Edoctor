@@ -18,7 +18,7 @@ import DoctorDetails from './components/DoctorDetails';
 import FindDoctors from './components/FindDoctors';
 import UpdateAppointment from "./components/UpdateAppointment";
 import CancelAppointment from "./components/CancelAppointment";
-import PaymentMethod from "./components/Payment";
+import Payments from "./components/Payments";
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
         <Route path="/find-doctors" element={<FindDoctors />} />
         <Route path="/update-appointment" element={<UpdateAppointment />} />
         <Route path="/cancel-appointment" element={<CancelAppointment />} />
-        <Route path="/payments" element={<PaymentMethod />} />
+        <Route path="/payments" element={<Payments />} />
       </Routes>
     </Router>
   );
