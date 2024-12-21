@@ -18,24 +18,25 @@ body {
 .login-container h1 {
   font-size: 2rem;
   color: #282c34;
-  text-align: center;
 }
 
 .btn-primary {
-  background-color: green;
+  background-color: #2c3e50;
   font-weight: bold;
+  width: 82%;
+  text-align: center;
 }
 
 .btn-primary:hover {
-  background-color: darkgreen;
+  background-color: #89cfc1;
 }
 
 .login-footer {
-    margin-top: 10px;
-  }
-  
+  margin-top: 10px;
+}
+
 .forgot-password-link {
-  color: #551A8B;
+  color: #551a8b;
   text-decoration: none;
   font-size: 0.9rem;
 }
@@ -45,7 +46,7 @@ body {
 }
 
 .register-link {
-  color: #551A8B;
+  color: #551a8b;
   text-decoration: none;
   font-size: 0.9rem;
   margin-left: 30px;
@@ -55,4 +56,12 @@ body {
 .register-link:hover {
   text-decoration: underline;
 }
-  
+.form-group {
+  width: 100%;
+  text-align: center;
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
