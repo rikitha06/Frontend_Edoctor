@@ -74,48 +74,50 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <center>
-        <h1>LOGIN</h1>
-      </center>
-      <form onSubmit={handleLogin}>
-        <div className="form-group">
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
-            required
-          />
-          {errors.username && <p className="error">{errors.username}</p>}
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-          {errors.password && <p className="error">{errors.password}</p>}
-        </div>
+    <div className="login-background">
+      <div className="login-container">
         <center>
-          <button className="btn-primary" type="submit">
-            Login
-          </button>
+          <h1>LOGIN</h1>
         </center>
-      </form>
-      <div className="login-footer">
-        <Link to="/forgot-password" className="forgot-password-link">
-          Forgot Password?
-        </Link>
-        <Link to="/register" className="register-link">
-          Don't have an account? Register
-        </Link>
+        <form onSubmit={handleLogin}>
+          <div className="form-group">
+            <label>Username:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              required
+            />
+            {errors.username && <p className="error">{errors.username}</p>}
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+            {errors.password && <p className="error">{errors.password}</p>}
+          </div>
+          <center>
+            <button className="btn-primary" type="submit">
+              Login
+            </button>
+          </center>
+        </form>
+        <div className="login-footer">
+          <Link to="/forgot-password" className="forgot-password-link">
+            Forgot Password?
+          </Link>
+          <Link to="/register" className="register-link">
+            Don't have an account? Register
+          </Link>
+        </div>
+        {message && <p className="message">{message}</p>}
       </div>
-      {message && <p className="message">{message}</p>}
     </div>
   );
 }

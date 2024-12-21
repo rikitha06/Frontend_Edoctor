@@ -1,22 +1,32 @@
+/* Apply background image to the entire body */
 body {
-  background-color: #95d2e4;
-  width: 100%;
-  height: 100%;
+  background-image: url(/public/images/background1.jpg); /* Add the correct path to your image */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
 }
 
+/* Container for the form */
 .form-container {
-  max-width: 400px;
+  width: 750px;
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for the form */
+  min-height: 80vh; /* Ensures the form container doesn't shrink too much */
+  margin-top: 50px; /* Add margin from top to create space */
+  padding-top: 30px; /* Adds spacing at the top of the form */
+  padding-bottom: 50px; /* Adds spacing from the bottom */
 }
 
-h2 {
+h1 {
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 form {
@@ -24,19 +34,39 @@ form {
   flex-direction: column;
 }
 
-input, select {
-  padding: 5px;
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  display: block;
+}
+
+input,
+select,
+.btn {
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error-text {
+  color: red;
   font-size: 14px;
 }
 
+input.error {
+  border-color: red;
+}
+
 .btn {
-  padding: 10px;
   background-color: green;
   color: white;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
 }
 

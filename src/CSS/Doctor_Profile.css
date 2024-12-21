@@ -10,15 +10,15 @@
 
 h2 {
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: #333;
 }
 
 form {
   margin-top: 20px;
 }
 
-form div {
-  margin-bottom: 15px;
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
@@ -32,6 +32,12 @@ input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
 }
 
 button {
@@ -50,19 +56,4 @@ button {
 
 button:hover {
   background-color: #1abc9c;
-}
-
-.fetch-profile-section {
-  margin-top: 20px;
-}
-
-.fetch-profile-section label {
-  margin-right: 10px;
-}
-
-.fetch-profile-section input {
-  display: inline-block;
-  width: auto;
-  padding: 8px;
-  margin-right: 10px;
 }

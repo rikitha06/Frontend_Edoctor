@@ -1,31 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Import the API service
+import api from '../services/api';
 import '../CSS/Register.css';
 
 function Register() {
   const [formData, setFormData] = useState({
-    role: 'PATIENT', // Default role
+    role: 'PATIENT',
     username: '',
     password: '',
     email: '',
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Update form data on input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
   };
 
-  // Handle form submission
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.username) newErrors.username = 'Username is required';
+    if (!formData.email) newErrors.email = 'Email is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+    return newErrors;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      const response = await api.post('/auth/register', formData); 
+      const response = await api.post('/auth/register', formData);
       alert('Registration successful! Redirecting to Verify Email...');
       navigate('/verify-email', { state: { username: formData.username } });
     } catch (error) {
@@ -34,7 +48,7 @@ function Register() {
         error.response?.data?.message || 'An error occurred. Please try again later.';
       alert(`Registration failed: ${errorMessage}`);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -42,7 +56,6 @@ function Register() {
     <div className="form-container">
       <h1>Register</h1>
       <form onSubmit={handleRegister}>
-        {/* Username Input */}
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -52,11 +65,11 @@ function Register() {
             placeholder="Enter your username"
             value={formData.username}
             onChange={handleInputChange}
-            required
+            className={errors.username ? 'error' : ''}
           />
+          {errors.username && <span className="error-text">{errors.username}</span>}
         </div>
 
-        {/* Email Input */}
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
@@ -66,11 +79,11 @@ function Register() {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleInputChange}
-            required
+            className={errors.email ? 'error' : ''}
           />
+          {errors.email && <span className="error-text">{errors.email}</span>}
         </div>
 
-        {/* Password Input */}
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
@@ -80,11 +93,11 @@ function Register() {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleInputChange}
-            required
+            className={errors.password ? 'error' : ''}
           />
+          {errors.password && <span className="error-text">{errors.password}</span>}
         </div>
 
-        {/* Role Selection */}
         <div className="form-group">
           <label htmlFor="role">Role:</label>
           <select
@@ -98,12 +111,7 @@ function Register() {
           </select>
         </div>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="btn"
-          disabled={loading} // Disable button during loading
-        >
+        <button type="submit" className="btn" disabled={loading}>
           {loading ? 'Registering...' : 'Register'}
         </button>
       </form>

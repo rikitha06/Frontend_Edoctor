@@ -3,18 +3,18 @@ import axios from "../services/api";
 import "../CSS/AvailabilityPage.css";
 
 function AvailabilityPage() {
-  const [availabilities, setAvailabilities] = useState([]); // Store fetched availabilities
+  const [availabilities, setAvailabilities] = useState([]);
   const [formData, setFormData] = useState({
     fromDate: "",
     endDate: "",
-  }); // Form data for add/update
-  const [editAvailabilityId, setEditAvailabilityId] = useState(''); // Track edit mode
+  });
+  const [errors, setErrors] = useState({});
+  const [editAvailabilityId, setEditAvailabilityId] = useState(null);
   const username = localStorage.getItem("username");
 
   useEffect(() => {
-    // Automatically fetch availabilities on page load
     const fetchInitialAvailabilities = async () => {
-      if(username) {
+      if (username) {
         try {
           const response = await axios.get(`/doctor/${username}/availability/viewAvailability`);
           if (response.data.length === 0) {
@@ -26,8 +26,7 @@ function AvailabilityPage() {
           console.error("Error fetching availabilities:", error);
           alert("Failed to fetch availabilities. Please check your login session.");
         }
-      }
-      else {
+      } else {
         alert("Login to fetch availabilities.");
       }
     };
@@ -38,27 +37,46 @@ function AvailabilityPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Remove validation error for the field
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.fromDate) newErrors.fromDate = "From Date is required.";
+    if (!formData.endDate) newErrors.endDate = "End Date is required.";
+    else if (new Date(formData.endDate) < new Date(formData.fromDate))
+      newErrors.endDate = "End Date cannot be before From Date.";
+    return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
     try {
       if (editAvailabilityId) {
-        const response = await axios.put(
+        await axios.put(
           `/doctor/${username}/availability/updateAvailability?id=${editAvailabilityId}`,
           formData
         );
         alert("Availability updated successfully!");
         setEditAvailabilityId(null);
       } else {
-        const response = await axios.post(
+        await axios.post(
           `/doctor/${username}/availability/addAvailability`,
           formData
         );
         alert("Availability added successfully!");
       }
-      setFormData({fromDate: "", endDate: "" });
-      fetchAvailabilities(); // Refresh availabilities
+      setFormData({ fromDate: "", endDate: "" });
+      fetchAvailabilities();
     } catch (error) {
       console.error("Error saving availability:", error);
       alert("Failed to save availability. Please try again.");
@@ -125,22 +143,26 @@ function AvailabilityPage() {
 
       <h3>{editAvailabilityId ? "Update Availability" : "Add Availability"}</h3>
       <form onSubmit={handleSubmit}>
-        <label>From Date:</label>
-        <input
-          type="date"
-          name="fromDate"
-          value={formData.fromDate}
-          onChange={handleInputChange}
-          required
-        />
-        <label>End Date:</label>
-        <input
-          type="date"
-          name="endDate"
-          value={formData.endDate}
-          onChange={handleInputChange}
-          required
-        />
+        <div className="form-group">
+          <label>From Date:</label>
+          <input
+            type="date"
+            name="fromDate"
+            value={formData.fromDate}
+            onChange={handleInputChange}
+          />
+          {errors.fromDate && <div className="error">{errors.fromDate}</div>}
+        </div>
+        <div className="form-group">
+          <label>End Date:</label>
+          <input
+            type="date"
+            name="endDate"
+            value={formData.endDate}
+            onChange={handleInputChange}
+          />
+          {errors.endDate && <div className="error">{errors.endDate}</div>}
+        </div>
         <button type="submit">{editAvailabilityId ? "Update" : "Add"} Availability</button>
       </form>
     </div>

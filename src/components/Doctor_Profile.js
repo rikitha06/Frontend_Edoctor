@@ -14,12 +14,13 @@ function Profile() {
     mobileNo: "",
     chargedPerVisit: "",
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const username = localStorage.getItem("username");
 
   // Fetch Doctor Profile by ID
   const fetchProfile = async () => {
-    if(username) {
+    if (username) {
       try {
         const response = await axios.get(`/doctor/${username}/viewProfile`);
         setDoctorProfile(response.data);
@@ -31,28 +32,51 @@ function Profile() {
     }
   };
 
-
   // Handle Form Input Changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Remove validation error for the field
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  // Form Validation
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.specialization) newErrors.specialization = "Specialization is required.";
+    if (!formData.location) newErrors.location = "Location is required.";
+    if (!formData.hospitalName) newErrors.hospitalName = "Hospital Name is required.";
+    if (!formData.mobileNo) newErrors.mobileNo = "Mobile Number is required.";
+    else if (!/^\d{10}$/.test(formData.mobileNo)) newErrors.mobileNo = "Invalid Mobile Number.";
+    if (!formData.chargedPerVisit) newErrors.chargedPerVisit = "Charge per Visit is required.";
+    else if (isNaN(formData.chargedPerVisit)) newErrors.chargedPerVisit = "Charge must be a number.";
+    return newErrors;
   };
 
   // Add or Update Profile
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
     try {
       setLoading(true);
 
       if (doctorProfile) {
-        // Update existing profile (skip email and password)
+        // Update existing profile
         const response = await axios.put(`/doctor/${username}/updateProfile`, formData);
         alert("Profile updated successfully!");
         setDoctorProfile(response.data); // Update profile state
       } else {
         // Add new profile
         const response = await axios.post(`/doctor/${username}/addProfile`, formData);
-        alert("Profile added successfully! Check mail for doctorId");
+        alert("Profile added successfully! Check mail for doctorId.");
         setDoctorProfile(response.data); // Set the new profile
         setHasProfile(true); // Switch to profile view
         setFormData({
@@ -74,7 +98,6 @@ function Profile() {
   };
 
   useEffect(() => {
-    // Fetch doctor profile if doctorId is already set
     if (username) {
       fetchProfile();
     }
@@ -84,158 +107,86 @@ function Profile() {
     <div className="profile-container">
       <h2>Doctor Profile</h2>
 
-      {/* If no profile exists, show Add Profile or Fetch Profile section */}
       {!doctorProfile && (
         <>
           <h3>Add Profile</h3>
-          <form onSubmit={handleSubmit}>
-            <div>
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="form-group">
               <label>Name:</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                required
               />
+              {errors.name && <div className="error">{errors.name}</div>}
             </div>
-            <div>
+            <div className="form-group">
               <label>Specialization:</label>
               <input
                 type="text"
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleInputChange}
-                required
               />
+              {errors.specialization && <div className="error">{errors.specialization}</div>}
             </div>
-            <div>
+            <div className="form-group">
               <label>Location:</label>
               <input
                 type="text"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                required
               />
+              {errors.location && <div className="error">{errors.location}</div>}
             </div>
-            <div>
+            <div className="form-group">
               <label>Hospital Name:</label>
               <input
                 type="text"
                 name="hospitalName"
                 value={formData.hospitalName}
                 onChange={handleInputChange}
-                required
               />
+              {errors.hospitalName && <div className="error">{errors.hospitalName}</div>}
             </div>
-            <div>
+            <div className="form-group">
               <label>Mobile Number:</label>
               <input
                 type="tel"
                 name="mobileNo"
                 value={formData.mobileNo}
                 onChange={handleInputChange}
-                required
               />
+              {errors.mobileNo && <div className="error">{errors.mobileNo}</div>}
             </div>
-            <div>
+            <div className="form-group">
               <label>Charged per Visit:</label>
               <input
                 type="text"
                 name="chargedPerVisit"
                 value={formData.chargedPerVisit}
                 onChange={handleInputChange}
-                required
               />
+              {errors.chargedPerVisit && <div className="error">{errors.chargedPerVisit}</div>}
             </div>
             <button type="submit" disabled={loading}>
-              {loading ? 'Adding Profile...' : 'Add Profile'}
+              {loading ? "Adding Profile..." : "Add Profile"}
             </button>
           </form>
         </>
       )}
 
-      {/* If profile exists, show the profile details */}
       {doctorProfile && (
         <>
           <h3>Profile Details</h3>
           <form onSubmit={handleSubmit}>
-            <div>
+            <div className="form-group">
               <label>Doctor ID:</label>
-              <input
-                type="text"
-                name="doctorId"
-                value={doctorProfile.doctorId || ""}
-                disabled
-              />
+              <input type="text" value={doctorProfile.doctorId || ""} disabled />
             </div>
-            <div>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={doctorProfile.name || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, name: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Specialization:</label>
-              <input
-                type="text"
-                name="specialization"
-                value={doctorProfile.specialization || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, specialization: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Location:</label>
-              <input
-                type="text"
-                name="location"
-                value={doctorProfile.location || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, location: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Hospital Name:</label>
-              <input
-                type="text"
-                name="hospitalName"
-                value={doctorProfile.hospitalName || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, hospitalName: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Mobile Number:</label>
-              <input
-                type="tel"
-                name="mobileNo"
-                value={doctorProfile.mobileNo || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, mobileNo: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label>Charged Per Visit:</label>
-              <input
-                type="text"
-                name="chargedPerVisit"
-                value={doctorProfile.chargedPerVisit || ""}
-                onChange={(e) =>
-                  setDoctorProfile({ ...doctorProfile, chargedPerVisit: e.target.value })
-                }
-              />
-            </div>
+            {/* Profile fields for editing */}
             <button type="submit">Update Profile</button>
           </form>
         </>

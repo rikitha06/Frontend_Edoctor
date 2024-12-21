@@ -38,6 +38,7 @@ function DoctorDashboard() {
       <header className="dashboard-header">
         <h1>Welcome{doctorName ? `, Dr. ${doctorName}` : " Doctor"}!</h1>
       </header>
+
       {isLoading ? (
         <p>Loading profile...</p>
       ) : (
@@ -58,6 +59,19 @@ function DoctorDashboard() {
           </ul>
         </nav>
       )}
+
+      {/* Background Section Below Navbar */}
+      <div className="dashboard-content">
+  <h2>Welcome to Your Dashboard</h2>
+  <p><pre>
+  Manage your appointments
+  update your availability
+  view your profile all from this central hub
+    </pre>
+    You can navigate through the available sections in the navbar above to access your schedule, patient details, and more.</p>
+  <p>If you need any assistance, feel free to reach out to the support team or visit the Help section.</p>
+</div>
+
     </div>
   );
 }
