@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "../services/api";
 import "../CSS/AddPatient.css";
 
+// hello
 function AddPatient() {
   const [hasProfile, setHasProfile] = useState(false);
   const [patientProfile, setPatientProfile] = useState(null);
