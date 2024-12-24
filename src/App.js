@@ -19,10 +19,15 @@ import FindDoctors from './components/FindDoctors';
 import UpdateAppointment from "./components/UpdateAppointment";
 import CancelAppointment from "./components/CancelAppointment";
 import Payments from "./components/Payments";
+import Chatbot from './components/Chatbot';
+import DoctorFeedback from './components/DoctorFeedback';
+
+
 
 function App() {
   return (
     <Router>
+      <Chatbot /> {/* Chatbot component will be visible on every page */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
@@ -43,6 +48,7 @@ function App() {
         <Route path="/update-appointment" element={<UpdateAppointment />} />
         <Route path="/cancel-appointment" element={<CancelAppointment />} />
         <Route path="/payments" element={<Payments />} />
+        <Route path="/doc-feedback" element={<DoctorFeedback />} />
       </Routes>
     </Router>
   );

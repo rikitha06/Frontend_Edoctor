@@ -54,6 +54,9 @@ function DoctorDashboard() {
               <Link to="/appointments">Appointments</Link>
             </li>
             <li>
+              <Link to="/doc-feedback">Feedback</Link>
+            </li>
+            <li>
               <button onClick={handleLogout}>Logout</button>
             </li>
           </ul>
@@ -62,7 +65,7 @@ function DoctorDashboard() {
 
       {/* Background Section Below Navbar */}
       <div className="dashboard-content">
-  <h2>Welcome to Your Dashboard</h2>
+  <h2>Doctor, every click here leads to healthier lives. Let’s go!</h2>
   <p><pre>
   Manage your appointments
   update your availability

@@ -62,6 +62,20 @@ function PatientDashboard() {
           </ul>
         </nav>
       )}
+{/* Background Section Below Navbar */}
+<div className="dashboard-content">
+  <h2>Empowering your wellness, one step at a time!</h2>
+  <p>
+    <pre>
+    Book your appointments
+    view your medical history
+    update your profile all from this central hub
+    </pre>
+    Use the navigation bar above to explore your appointments, health records, and more.
+  </p>
+  <p>If you need any help or guidance, feel free to contact the support team or check the Help section.</p>
+</div>
+
     </div>
   );
 }
