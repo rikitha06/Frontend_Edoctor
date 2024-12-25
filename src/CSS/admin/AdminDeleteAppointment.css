@@ -1,98 +1,69 @@
-/* Container for the entire admin appointment page */
-.admin-delete-appointment {
-    margin: 20px auto;
-    padding: 30px;
-    max-width: 1200px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* AdminDeleteDoctor Component Styling */
+.doctor-page {
+  margin: 20px auto;
+  padding: 30px;
+  max-width: 800px; /* Set max-width to avoid covering the entire page */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-page h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Input Field Styling */
+.doctor-page input {
+  width: calc(100% - 20px); /* Ensure the input doesn't cover the entire page */
+  padding: 10px;
+  margin-bottom: 20px; /* Add margin for spacing */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.doctor-page button {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  width: 100%; /* Ensure the button spans the full width of the form */
+}
+
+.doctor-page button:hover {
+  background-color: #c82333;
+}
+
+.doctor-page button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .doctor-page {
+    padding: 20px;
   }
-  
-  .admin-delete-appointment h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #333;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .doctor-page h1 {
+    font-size: 1.8rem;
   }
-  
-  /* Style for the appointments table */
-  .appointments-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  .doctor-page input {
+    padding: 8px;
+    margin-bottom: 15px; /* Reduce space between input fields */
   }
-  
-  /* Style for table headers */
-  .appointments-table th {
-    background-color:  #2c3e50;
-    color: white;
-    padding: 12px 20px;
-    text-align: left;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-  }
-  
-  /* Style for table data */
-  .appointments-table td {
-    padding: 12px 20px;
-    text-align: left;
-    font-size: 1rem;
-    color: #555;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Hover effect for table rows */
-  .appointments-table tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-  }
-  
-  /* Style for empty data message */
-  .appointments-table td[colspan] {
-    text-align: center;
-    font-style: italic;
-    color: #888;
-    padding: 20px 0;
-  }
-  
-  /* Style for the delete button */
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+
+  .doctor-page button {
+    padding: 10px 15px;
     font-size: 1rem;
   }
-  
-  /* Hover effect for the delete button */
-  .delete-btn:hover {
-    background-color: #c82333;
-  }
-  
-  /* Style for the delete button on focus */
-  .delete-btn:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
-  }
-  
-  /* Responsive styling */
-  @media (max-width: 768px) {
-    .appointments-table th,
-    .appointments-table td {
-      padding: 10px 15px;
-      font-size: 0.9rem;
-    }
-  
-    .admin-delete-appointment h2 {
-      font-size: 1.8rem;
-    }
-  }
-  
+}

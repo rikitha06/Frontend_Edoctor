@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
-import '../CSS/Register.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import "../CSS/Register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
-    role: 'PATIENT',
-    username: '',
-    password: '',
-    email: '',
+    role: "PATIENT",
+    username: "",
+    password: "",
+    email: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -17,14 +17,14 @@ function Register() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' });
+    setErrors({ ...errors, [name]: "" });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.username) newErrors.username = 'Username is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
+    if (!formData.username) newErrors.username = "Username is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
     return newErrors;
   };
 
@@ -39,13 +39,14 @@ function Register() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/register', formData);
-      alert('Registration successful! Redirecting to Verify Email...');
-      navigate('/verify-email', { state: { username: formData.username } });
+      const response = await api.post("/auth/register", formData);
+      alert("Registration successful! Redirecting to Verify Email...");
+      navigate("/verify-email", { state: { username: formData.username } });
     } catch (error) {
-      console.error('Error occurred during registration:', error);
+      console.error("Error occurred during registration:", error);
       const errorMessage =
-        error.response?.data?.message || 'An error occurred. Please try again later.';
+        error.response?.data?.message ||
+        "An error occurred. Please try again later.";
       alert(`Registration failed: ${errorMessage}`);
     } finally {
       setLoading(false);
@@ -53,7 +54,7 @@ function Register() {
   };
 
   return (
-    <div className="form-container">
+    <div className="register-container">
       <h1>Register</h1>
       <form onSubmit={handleRegister}>
         <div className="form-group">
@@ -65,9 +66,11 @@ function Register() {
             placeholder="Enter your username"
             value={formData.username}
             onChange={handleInputChange}
-            className={errors.username ? 'error' : ''}
+            className={errors.username ? "error" : ""}
           />
-          {errors.username && <span className="error-text">{errors.username}</span>}
+          {errors.username && (
+            <span className="error-text">{errors.username}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -79,12 +82,12 @@ function Register() {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleInputChange}
-            className={errors.email ? 'error' : ''}
+            className={errors.email ? "error" : ""}
           />
           {errors.email && <span className="error-text">{errors.email}</span>}
         </div>
-
-        <div className="form-group">
+        <br></br>
+        <div className="form-group1">
           <label htmlFor="password">Password:</label>
           <input
             id="password"
@@ -93,9 +96,11 @@ function Register() {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleInputChange}
-            className={errors.password ? 'error' : ''}
+            className={errors.password ? "error" : ""}
           />
-          {errors.password && <span className="error-text">{errors.password}</span>}
+          {errors.password && (
+            <span className="error-text">{errors.password}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -110,9 +115,9 @@ function Register() {
             <option value="DOCTOR">Doctor</option>
           </select>
         </div>
-
-        <button type="submit" className="btn" disabled={loading}>
-          {loading ? 'Registering...' : 'Register'}
+        <br></br>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
     </div>

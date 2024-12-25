@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../../services/api"; // Ensure correct path for admin API service
-
+import "../../CSS/admin/AdminUpdateAppoint.css";
 function AdminUpdateAppointment() {
   const [appointmentId, setAppointmentId] = useState("");
   const [doctorId, setDoctorId] = useState("");
@@ -11,7 +11,9 @@ function AdminUpdateAppointment() {
     const data = { doctorId, appointmentDateTime, reason };
     try {
       await axios.put(
-        `${localStorage.getItem("username")}/admin/appointments/${appointmentId}`,
+        `${localStorage.getItem(
+          "username"
+        )}/admin/appointments/${appointmentId}`,
         data
       );
       alert("Appointment updated successfully!");

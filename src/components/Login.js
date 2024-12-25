@@ -87,20 +87,20 @@ function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
-              required
+              className={errors.username ? "input-error" : ""}
             />
-            {errors.username && <p className="error">{errors.username}</p>}
+            {errors.username && <p className="error-text">{errors.username}</p>}
           </div>
-          <div className="form-group">
+          <div className="form-group1">
             <label>Password:</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              required
+              className={errors.password ? "input-error" : ""}
             />
-            {errors.password && <p className="error">{errors.password}</p>}
+            {errors.password && <p className="error-text">{errors.password}</p>}
           </div>
           <center>
             <button className="btn-primary" type="submit">

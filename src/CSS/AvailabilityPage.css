@@ -1,3 +1,9 @@
+body {
+  background-image: url("/public/images/background1.jpg"); /* Replace with your image URL */
+  background-size: cover; /* Make the background image cover the entire page */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat;
+}
 .availability-page {
   max-width: 800px;
   margin: 0 auto;
@@ -21,6 +27,9 @@ table th {
   background-color: #2c3e50;
   color: white;
 }
+input[type="date"] {
+  width: 100%;
+}
 
 button {
   margin: 0 5px;
@@ -30,6 +39,7 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
+  width: 50%;
 }
 
 button:hover {

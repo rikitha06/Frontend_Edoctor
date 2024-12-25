@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../../services/api"; // Ensure the correct path to your API service
-
+import "../../CSS/admin/AdminAddAppint.css";
 function AdminAddAppointment() {
   const [patientId, setPatientId] = useState("");
   const [doctorId, setDoctorId] = useState("");
@@ -10,7 +10,10 @@ function AdminAddAppointment() {
   const handleAppointmentSubmission = async () => {
     const data = { patientId, doctorId, appointmentDateTime, reason };
     try {
-      await axios.post(`${localStorage.getItem("username")}/admin/add-appointment`, data);
+      await axios.post(
+        `${localStorage.getItem("username")}/admin/add-appointment`,
+        data
+      );
       alert("Appointment added successfully!");
       setPatientId("");
       setDoctorId("");

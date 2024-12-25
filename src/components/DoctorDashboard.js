@@ -65,16 +65,20 @@ function DoctorDashboard() {
 
       {/* Background Section Below Navbar */}
       <div className="dashboard-content">
-  <h2>Every click here leads to healthier lives. Let’s go!</h2>
-  <p><pre>
-  Manage your appointments
-  update your availability
-  view your profile all from this central hub
-    </pre>
-    You can navigate through the available sections in the navbar above to access your schedule, patient details, and more.</p>
-  <p>If you need any assistance, feel free to reach out to the support team or visit the Help section.</p>
-</div>
-
+        <h2>Every click here leads to healthier lives. Let’s go!</h2>
+        <pre>
+          Manage your appointments update your availability view your profile
+          all from this central hub
+        </pre>
+        <p>
+          You can navigate through the available sections in the navbar above to
+          access your schedule, patient details, and more.
+        </p>
+        <p>
+          If you need any assistance, feel free to reach out to the support team
+          or visit the Help section.
+        </p>
+      </div>
     </div>
   );
 }

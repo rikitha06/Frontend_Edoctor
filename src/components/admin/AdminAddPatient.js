@@ -58,12 +58,11 @@ function AdminAddPatient() {
     try {
       setLoading(true);
       const response = await axios.post(
-        `/${username}/admin/patientAdd?patientUsername=${patientUsername}`, formData
+        `/${username}/admin/patientAdd?patientUsername=${patientUsername}`,
+        formData
       );
 
-      alert(
-        "Profile added successfully! Check the email for the patient ID."
-      );
+      alert("Profile added successfully! Check the email for the patient ID.");
       setFormData({
         name: "",
         mobileNo: "",
@@ -101,12 +100,24 @@ function AdminAddPatient() {
       {patientProfile && (
         <div className="profile-details">
           <h3>Profile Details</h3>
-          <p><strong>Name:</strong> {patientProfile.name}</p>
-          <p><strong>Mobile No:</strong> {patientProfile.mobileNo}</p>
-          <p><strong>Blood Group:</strong> {patientProfile.bloodGroup}</p>
-          <p><strong>Gender:</strong> {patientProfile.gender}</p>
-          <p><strong>Age:</strong> {patientProfile.age}</p>
-          <p><strong>Address:</strong> {patientProfile.address}</p>
+          <p>
+            <strong>Name:</strong> {patientProfile.name}
+          </p>
+          <p>
+            <strong>Mobile No:</strong> {patientProfile.mobileNo}
+          </p>
+          <p>
+            <strong>Blood Group:</strong> {patientProfile.bloodGroup}
+          </p>
+          <p>
+            <strong>Gender:</strong> {patientProfile.gender}
+          </p>
+          <p>
+            <strong>Age:</strong> {patientProfile.age}
+          </p>
+          <p>
+            <strong>Address:</strong> {patientProfile.address}
+          </p>
         </div>
       )}
 
@@ -156,7 +167,7 @@ function AdminAddPatient() {
                 <option value="OTHERS">Others</option>
               </select>
             </div>
-            <div>
+            <div className="age">
               <label>Age:</label>
               <input
                 type="number"

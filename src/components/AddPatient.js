@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "../services/api";
 import "../CSS/AddPatient.css";
 
-// hello
 function AddPatient() {
   const [hasProfile, setHasProfile] = useState(false);
   const [patientProfile, setPatientProfile] = useState(null);
@@ -15,56 +14,103 @@ function AddPatient() {
     address: "",
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    mobileNo: "",
+    bloodGroup: "",
+    age: "",
+    address: "",
+  });
+
   const username = localStorage.getItem("username");
 
-  // Fetch Patient Profile by Username
   const fetchProfile = async () => {
-    if(username) {
+    if (username) {
       try {
         const response = await axios.get(`/${username}/patient/viewProfile`);
         setPatientProfile(response.data);
-        setHasProfile(true); // Show profile section
+        setHasProfile(true);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
-    }
-    else {
+    } else {
       alert("Login first to fetch profile.");
     }
   };
 
-  // Handle Form Input Changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: "" }); // Clear the error when user starts typing
   };
 
-  // Add or Update Profile
+  const validateForm = () => {
+    let formErrors = {};
+    let isValid = true;
+
+    // Validate name
+    if (!formData.name) {
+      formErrors.name = "Name is required.";
+      isValid = false;
+    }
+
+    // Validate mobile number
+    if (!formData.mobileNo) {
+      formErrors.mobileNo = "Mobile number is required.";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.mobileNo)) {
+      formErrors.mobileNo = "Please enter a valid 10-digit mobile number.";
+      isValid = false;
+    }
+
+    // Validate age
+    if (!formData.age || formData.age <= 0) {
+      formErrors.age = "Please enter a valid age.";
+      isValid = false;
+    }
+
+    // Validate address
+    if (!formData.address) {
+      formErrors.address = "Address is required.";
+      isValid = false;
+    }
+
+    setErrors(formErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Don't submit the form if validation fails
+    }
+
     try {
       setLoading(true);
 
       if (patientProfile) {
-        try {
-          // Update existing profile
-          const response = await axios.put(`/${username}/patient/updateProfile`, formData);
-          setPatientProfile(response.data); // Update profile state
-          alert("Profile updated successfully!");
-        }
-        catch {
-          alert("There was an error updating your profile.");
-        }
+        // Update profile
+        const response = await axios.put(
+          `/${username}/patient/updateProfile`,
+          formData
+        );
+        setPatientProfile(response.data);
+        alert("Profile updated successfully!");
       } else {
-        // Add new profile
-        const response = await axios.post(`/${username}/patient/addProfile`, formData);
-        alert("Profile added successfully! Check your email for the patient ID.");
-        setPatientProfile(response.data); // Set the new profile
-        setHasProfile(true); // Switch to profile view
+        // Add profile
+        const response = await axios.post(
+          `/${username}/patient/addProfile`,
+          formData
+        );
+        alert(
+          "Profile added successfully! Check your email for the patient ID."
+        );
+        setPatientProfile(response.data);
+        setHasProfile(true);
         setFormData({
           name: "",
           mobileNo: "",
-          email: "",
           bloodGroup: "",
           gender: "MALE",
           age: "",
@@ -89,7 +135,7 @@ function AddPatient() {
     <div className="profile-container">
       <h2>Patient Profile</h2>
 
-      {/* If no profile exists, show Add Profile or Fetch Profile section */}
+      {/* Add or Edit Profile Form */}
       {!patientProfile && (
         <>
           <h3>Add Profile</h3>
@@ -101,8 +147,8 @@ function AddPatient() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                required
               />
+              {errors.name && <span className="error">{errors.name}</span>}
             </div>
             <div>
               <label>Mobile Number:</label>
@@ -111,8 +157,10 @@ function AddPatient() {
                 name="mobileNo"
                 value={formData.mobileNo}
                 onChange={handleInputChange}
-                required
               />
+              {errors.mobileNo && (
+                <span className="error">{errors.mobileNo}</span>
+              )}
             </div>
             <div>
               <label>Blood Group:</label>
@@ -143,6 +191,7 @@ function AddPatient() {
                 value={formData.age}
                 onChange={handleInputChange}
               />
+              {errors.age && <span className="error">{errors.age}</span>}
             </div>
             <div>
               <label>Address:</label>
@@ -151,6 +200,9 @@ function AddPatient() {
                 value={formData.address}
                 onChange={handleInputChange}
               />
+              {errors.address && (
+                <span className="error">{errors.address}</span>
+              )}
             </div>
             <button type="submit" disabled={loading}>
               {loading ? "Adding Profile..." : "Add Profile"}
@@ -159,7 +211,7 @@ function AddPatient() {
         </>
       )}
 
-      {/* If profile exists, show the profile details */}
+      {/* Profile Details Section */}
       {patientProfile && (
         <>
           <h3>Profile Details</h3>
@@ -183,6 +235,7 @@ function AddPatient() {
                   setPatientProfile({ ...patientProfile, name: e.target.value })
                 }
               />
+              {errors.name && <span className="error">{errors.name}</span>}
             </div>
             <div>
               <label>Mobile Number:</label>
@@ -197,6 +250,9 @@ function AddPatient() {
                   })
                 }
               />
+              {errors.mobileNo && (
+                <span className="error">{errors.mobileNo}</span>
+              )}
             </div>
             <div>
               <label>Email:</label>
@@ -251,6 +307,7 @@ function AddPatient() {
                   })
                 }
               />
+              {errors.age && <span className="error">{errors.age}</span>}
             </div>
             <div>
               <label>Address:</label>
@@ -264,6 +321,9 @@ function AddPatient() {
                   })
                 }
               />
+              {errors.address && (
+                <span className="error">{errors.address}</span>
+              )}
             </div>
             <button type="submit">Update Profile</button>
           </form>

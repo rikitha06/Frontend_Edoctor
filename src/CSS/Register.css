@@ -1,37 +1,26 @@
-/* Apply background image to the entire body */
+/* Register.css */
+
 body {
-  background-image: url(/public/images/background1.jpg); /* Add the correct path to your image */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  margin: 0;
   font-family: Arial, sans-serif;
-  min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+  margin: 0;
+  padding: 0;
+  background: url("/public/images/background1.jpg") no-repeat center center
+    fixed;
+  background-size: cover;
 }
 
-/* Container for the form */
-.form-container {
-  width: 750px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for the form */
-  min-height: 80vh; /* Ensures the form container doesn't shrink too much */
-  margin-top: 50px; /* Add margin from top to create space */
-  padding-top: 30px; /* Adds spacing at the top of the form */
-  padding-bottom: 50px; /* Adds spacing from the bottom */
+.register-container {
+  width: 400px;
+  margin: 0% 70% 0% 40%; /* 2nd right 3rd bottom*/
+  padding: 40px;
+  background: rgba(224, 227, 231, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h1 {
+.register-container h1 {
   text-align: center;
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
+  color: #333;
 }
 
 .form-group {
@@ -39,37 +28,49 @@ form {
 }
 
 label {
-  margin-bottom: 5px;
   display: block;
+  margin-bottom: 5px;
+  color: #555;
 }
 
-input,
-select,
-.btn {
+select {
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  width: 100%;
+  border-radius: 5px;
   box-sizing: border-box;
+}
+.form-group1 input {
+  width: 100%;
+  padding: 10px;
+}
+
+input.error,
+select.error {
+  border-color: #e74c3c;
 }
 
 .error-text {
-  color: red;
-  font-size: 14px;
+  color: #e74c3c;
+  font-size: 12px;
 }
 
-input.error {
-  border-color: red;
-}
-
-.btn {
-  background-color: green;
-  color: white;
+button {
+  width: 100%;
+  padding: 10px;
+  background: #3498db;
+  color: #fff;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-.btn:hover {
-  background-color: darkgreen;
+button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #2980b9;
 }
