@@ -36,6 +36,15 @@ import DoctorStats from "./components/admin/DoctorStats";
 import WebStats from "./components/admin/WebStats";
 import AdminAppoint from "./components/admin/AdminAppoint";
 
+import AdminAddDoctor from './components/admin/AdminAddDoctor';
+import AdminUpdateDoctor from './components/admin/AdminUpdateDoctor';
+import AdminDeleteDoctor from './components/admin/AdminDeleteDoctor';
+import AllDoctor from "./components/admin/AllDoctor";
+import AdminAddAppointment from './components/admin/AdminAddAppointmet';
+import AdminUpdateAppointment from './components/admin/AdminUpdateAppointment';
+import AdminDeleteAppointment from './components/admin/AdminDeleteAppointment';
+import AdminAllAppointment from './components/admin/AdminAllAppointment';
+
 
 
 function App() {
@@ -71,6 +80,19 @@ function App() {
         <Route path="/admin-updatePatient" element={<AdminUpdatePatient />} />
         <Route path="/admin-deletePatient" element={<AdminDeletePatient />} />
         <Route path="/all-patient" element={<AllPatient />} />
+
+        
+        <Route path="/admin-addDoctor" element={<AdminAddDoctor />} />
+        <Route path="/admin-updateDoctor" element={<AdminUpdateDoctor />} />
+        <Route path="/admin-deleteDoctor" element={<AdminDeleteDoctor />} />
+        <Route path="/all-doctor" element={<AllDoctor />} />
+
+        <Route path="/admin-addappointment" element={<AdminAddAppointment />} />
+        <Route path="/admin-updateappointment" element={<AdminUpdateAppointment />} />
+        <Route path="/admin-deleteappointment" element={<AdminDeleteAppointment />} />
+        <Route path="/admin-allappointments" element={<AdminAllAppointment />} />
+
+
 
         <Route path="/admin-doctor" element={<AdminDoctor />} />
         <Route path="/patients-stats" element={<PatientStats />} />

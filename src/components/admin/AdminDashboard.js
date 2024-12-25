@@ -90,16 +90,16 @@ function AdminDashboard() {
               {dropdownOpen["doctors"] && (
                 <ul className="dropdown-menu">
                   <li>
-                    <Link to="/add-doctor">Add Doctor</Link>
+                    <Link to="/admin-addDoctor">Add Doctor</Link>
                   </li>
                   <li>
-                    <Link to="/update-doctor">Update Doctor</Link>
+                    <Link to="/admin-updateDoctor">Update Doctor</Link>
                   </li>
                   <li>
-                    <Link to="/delete-doctor">Delete Doctor</Link>
+                    <Link to="/admin-deleteDoctor">Delete Doctor</Link>
                   </li>
                   <li>
-                    <Link to="/all-doctors">All Doctors</Link>
+                    <Link to="/all-Doctor">All Doctors</Link>
                   </li>
                 </ul>
               )}
@@ -116,16 +116,16 @@ function AdminDashboard() {
               {dropdownOpen["appointments"] && (
                 <ul className="dropdown-menu">
                   <li>
-                    <Link to="/add-appointment">Add Appointment</Link>
+                    <Link to="/admin-addappointment">Add Appointment</Link>
                   </li>
                   <li>
-                    <Link to="/update-appointment">Update Appointment</Link>
+                    <Link to="/admin-updateappointment">Update Appointment</Link>
                   </li>
                   <li>
-                    <Link to="/delete-appointment">Delete Appointment</Link>
+                    <Link to="/admin-deleteappointment">Delete Appointment</Link>
                   </li>
                   <li>
-                    <Link to="/all-appointments">All Appointments</Link>
+                    <Link to="/admin-allappointments">All Appointments</Link>
                   </li>
                 </ul>
               )}
