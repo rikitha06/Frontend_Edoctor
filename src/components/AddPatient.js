@@ -25,7 +25,6 @@ function AddPatient() {
         setPatientProfile(response.data);
         setHasProfile(true); // Show profile section
       } catch (error) {
-        alert("You don't have a profile currently.");
         console.error("Error fetching profile:", error);
       }
     }
@@ -47,10 +46,15 @@ function AddPatient() {
       setLoading(true);
 
       if (patientProfile) {
-        // Update existing profile
-        const response = await axios.put(`/${username}/patient/updateProfile`, formData);
-        alert("Profile updated successfully!");
-        setPatientProfile(response.data); // Update profile state
+        try {
+          // Update existing profile
+          const response = await axios.put(`/${username}/patient/updateProfile`, formData);
+          setPatientProfile(response.data); // Update profile state
+          alert("Profile updated successfully!");
+        }
+        catch {
+          alert("There was an error updating your profile.");
+        }
       } else {
         // Add new profile
         const response = await axios.post(`/${username}/patient/addProfile`, formData);

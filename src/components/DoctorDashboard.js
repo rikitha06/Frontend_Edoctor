@@ -65,7 +65,7 @@ function DoctorDashboard() {
 
       {/* Background Section Below Navbar */}
       <div className="dashboard-content">
-  <h2>Doctor, every click here leads to healthier lives. Let’s go!</h2>
+  <h2>Every click here leads to healthier lives. Let’s go!</h2>
   <p><pre>
   Manage your appointments
   update your availability

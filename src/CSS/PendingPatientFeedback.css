@@ -1,0 +1,83 @@
+/* Basic styling for the pending patient feedback page */
+.pending-feedback-page {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading for the page */
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+/* Feedback table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    color: #333;
+}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.2rem;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+table td {
+    font-size: 1rem;
+}
+
+/* Add feedback button */
+.add-feedback-btn {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-feedback-btn:hover {
+    background-color: #45a049;
+}
+
+/* No pending feedback message */
+.no-feedback-message {
+    text-align: center;
+    color: #f44336;
+    font-size: 1.3rem;
+    margin-top: 20px;
+}
+
+/* General paragraph styling */
+p {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 15px;
+}

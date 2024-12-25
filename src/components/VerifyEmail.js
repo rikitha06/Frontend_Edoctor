@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../CSS/VerifyEmail.css';
+import axios from "../services/api";
 
 function VerifyEmail() {
   const location = useLocation();
@@ -11,21 +12,17 @@ function VerifyEmail() {
   const handleVerify = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/auth/verify-email?code=${verificationCode}&username=${username}`,
-        {
-          method: 'POST',
-        }
-      );
+      await axios.post(`/auth/verify-email?code=${verificationCode}&username=${username}` );
 
-      if (response.ok) {
-        alert('Email verified successfully! Redirecting to Login...');
-        navigate('/login');
-      } else {
-        alert('Verification failed.');
-      }
+      alert('Email verified successfully! Redirecting to Login...');
+      navigate('/login');
+
     } catch (error) {
-      alert('Error occurred during verification.');
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data || "Verification failed.");
+      } else {
+        alert("An unexpected error occurred during verification.");
+      }
     }
   };
 

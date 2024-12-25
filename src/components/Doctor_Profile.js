@@ -103,6 +103,20 @@ function Profile() {
     }
   }, [doctorId]);
 
+  // Pre-fill form with existing doctorProfile if it exists
+  useEffect(() => {
+    if (doctorProfile) {
+      setFormData({
+        name: doctorProfile.name || "",
+        specialization: doctorProfile.specialization || "",
+        location: doctorProfile.location || "",
+        hospitalName: doctorProfile.hospitalName || "",
+        mobileNo: doctorProfile.mobileNo || "",
+        chargedPerVisit: doctorProfile.chargedPerVisit || "",
+      });
+    }
+  }, [doctorProfile]);
+
   return (
     <div className="profile-container">
       <h2>Doctor Profile</h2>
@@ -180,14 +194,71 @@ function Profile() {
 
       {doctorProfile && (
         <>
-          <h3>Profile Details</h3>
-          <form onSubmit={handleSubmit}>
+          <h3>Edit Profile</h3>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="form-group">
-              <label>Doctor ID:</label>
-              <input type="text" value={doctorProfile.doctorId || ""} disabled />
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+              {errors.name && <div className="error">{errors.name}</div>}
             </div>
-            {/* Profile fields for editing */}
-            <button type="submit">Update Profile</button>
+            <div className="form-group">
+              <label>Specialization:</label>
+              <input
+                type="text"
+                name="specialization"
+                value={formData.specialization}
+                onChange={handleInputChange}
+              />
+              {errors.specialization && <div className="error">{errors.specialization}</div>}
+            </div>
+            <div className="form-group">
+              <label>Location:</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleInputChange}
+              />
+              {errors.location && <div className="error">{errors.location}</div>}
+            </div>
+            <div className="form-group">
+              <label>Hospital Name:</label>
+              <input
+                type="text"
+                name="hospitalName"
+                value={formData.hospitalName}
+                onChange={handleInputChange}
+              />
+              {errors.hospitalName && <div className="error">{errors.hospitalName}</div>}
+            </div>
+            <div className="form-group">
+              <label>Mobile Number:</label>
+              <input
+                type="tel"
+                name="mobileNo"
+                value={formData.mobileNo}
+                onChange={handleInputChange}
+              />
+              {errors.mobileNo && <div className="error">{errors.mobileNo}</div>}
+            </div>
+            <div className="form-group">
+              <label>Charged per Visit:</label>
+              <input
+                type="text"
+                name="chargedPerVisit"
+                value={formData.chargedPerVisit}
+                onChange={handleInputChange}
+              />
+              {errors.chargedPerVisit && <div className="error">{errors.chargedPerVisit}</div>}
+            </div>
+            <button type="submit" disabled={loading}>
+              {loading ? "Updating Profile..." : "Update Profile"}
+            </button>
           </form>
         </>
       )}

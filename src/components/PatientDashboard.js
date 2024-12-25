@@ -7,6 +7,7 @@ function PatientDashboard() {
   const [patientName, setPatientName] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // Fetch patient's profile based on username stored in localStorage
   useEffect(() => {
@@ -26,6 +27,10 @@ function PatientDashboard() {
       setIsLoading(false);
     }
   }, []);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
   // Logout function to clear localStorage and redirect
   const handleLogout = () => {
@@ -55,6 +60,22 @@ function PatientDashboard() {
             </li>
             <li>
               <Link to="/payments">Payments</Link>
+            </li>
+            <li>
+              <button onClick={toggleDropdown}>
+                    Feedback
+                    <span className="arrow">{dropdownOpen ? "▲" : "▼"}</span>
+                  </button>
+                  {dropdownOpen && (
+                    <ul className="dropdown-menu">
+                      <li>
+                        <Link to="/all-patient-feedback">All Feedbacks</Link>
+                      </li>
+                      <li>
+                        <Link to="/pending-patient-feedback">Pending Feedbacks</Link>
+                      </li>
+                    </ul>
+                  )}
             </li>
             <li>
               <button onClick={handleLogout}>Logout</button>

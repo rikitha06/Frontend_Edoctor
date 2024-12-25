@@ -1,0 +1,108 @@
+/* AdminDoctorPage.css */
+
+/* Global Styles */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: #a3dbe5; /* Light blue background */
+  font-family: Arial, sans-serif;
+}
+
+.doctor-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Header Styles */
+.doctor-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.doctor-page-header h1 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.doctor-page-header a {
+  text-decoration: none;
+  color: white;
+  background-color: #2c3e50;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.doctor-page-header a:hover {
+  background-color: #1abc9c;
+}
+
+/* Table Styles */
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.doctor-table th,
+.doctor-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.doctor-table th {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.doctor-table td input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.doctor-table td button {
+  padding: 8px 12px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.doctor-table td button:hover {
+  background-color: #1abc9c;
+  color: white;
+}
+
+.doctor-table td button:active {
+  background-color: #16a085;
+}
+
+/* Loading Indicator */
+.doctor-page p {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .doctor-table th,
+  .doctor-table td {
+    padding: 8px;
+  }
+
+  .doctor-table td input {
+    padding: 6px;
+  }
+}

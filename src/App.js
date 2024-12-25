@@ -21,6 +21,20 @@ import CancelAppointment from "./components/CancelAppointment";
 import Payments from "./components/Payments";
 import Chatbot from './components/Chatbot';
 import DoctorFeedback from './components/DoctorFeedback';
+import AllPatientFeedback from './components/AllPatientFeedback';
+import PendingPatientFeedback from './components/PendingPatientFeedback';
+import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminDoctor from "./components/admin/AdminDoctor";
+
+import AdminAddPatient from "./components/admin/AdminAddPatient";
+import AdminUpdatePatient from "./components/admin/AdminUpdatePatient";
+import AdminDeletePatient from "./components/admin/AdminDeletePatient";
+import AllPatient from "./components/admin/AllPatient";
+
+import PatientStats from "./components/admin/PatientStats";
+import DoctorStats from "./components/admin/DoctorStats";
+import WebStats from "./components/admin/WebStats";
+import AdminAppoint from "./components/admin/AdminAppoint";
 
 
 
@@ -49,6 +63,20 @@ function App() {
         <Route path="/cancel-appointment" element={<CancelAppointment />} />
         <Route path="/payments" element={<Payments />} />
         <Route path="/doc-feedback" element={<DoctorFeedback />} />
+        <Route path="/all-patient-feedback" element={<AllPatientFeedback />} />
+        <Route path="/pending-patient-feedback" element={<PendingPatientFeedback />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+        <Route path="/admin-addPatient" element={<AdminAddPatient />} />
+        <Route path="/admin-updatePatient" element={<AdminUpdatePatient />} />
+        <Route path="/admin-deletePatient" element={<AdminDeletePatient />} />
+        <Route path="/all-patient" element={<AllPatient />} />
+
+        <Route path="/admin-doctor" element={<AdminDoctor />} />
+        <Route path="/patients-stats" element={<PatientStats />} />
+        <Route path="/doctors-stats" element={<DoctorStats />} />
+        <Route path="/web-stats" element={<WebStats />} />
+        <Route path="/admin-appointments" element={<AdminAppoint />} />
       </Routes>
     </Router>
   );

@@ -17,9 +17,7 @@ function AvailabilityPage() {
       if (username) {
         try {
           const response = await axios.get(`/doctor/${username}/availability/viewAvailability`);
-          if (response.data.length === 0) {
-            alert("No availabilities found. Please add availability.");
-          } else {
+          if (response.data.length !== 0) {
             setAvailabilities(response.data);
           }
         } catch (error) {
@@ -117,29 +115,37 @@ function AvailabilityPage() {
     <div className="availability-page">
       <h2>Doctor Availability</h2>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>From Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {availabilities.map((availability) => (
-            <tr key={availability.availabilityId}>
-              <td>{availability.availabilityId}</td>
-              <td>{availability.fromDate}</td>
-              <td>{availability.endDate}</td>
-              <td>
-                <button onClick={() => handleEdit(availability)}>Update</button>
-                <button onClick={() => handleDelete(availability.availabilityId)}>Delete</button>
-              </td>
+      {availabilities.length <= 0?(
+        <p>No availabilities found</p>
+      ): (
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>From Date</th>
+              <th>End Date</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+              {
+                availabilities.map((availability) => (
+                  <tr key={availability.availabilityId}>
+                    <td>{availability.availabilityId}</td>
+                    <td>{availability.fromDate}</td>
+                    <td>{availability.endDate}</td>
+                    <td>
+                      <button onClick={() => handleEdit(availability)}>Update</button>
+                      <button onClick={() => handleDelete(availability.availabilityId)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              }
+          </tbody>
+        </table>
+      )}
+
+      
 
       <h3>{editAvailabilityId ? "Update Availability" : "Add Availability"}</h3>
       <form onSubmit={handleSubmit}>
