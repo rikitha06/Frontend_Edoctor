@@ -13,9 +13,35 @@ function AdminAddDoctor() {
     mobileNo: "",
     chargedPerVisit: "",
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const username = localStorage.getItem("username"); // Admin's username
+
+  // Validation helper function
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required.";
+    }
+
+    if (!formData.specialization.trim()) {
+      newErrors.specialization = "Specialization is required.";
+    }
+
+    if (!formData.mobileNo || !/^\d{10}$/.test(formData.mobileNo)) {
+      newErrors.mobileNo = "Mobile number must be exactly 10 digits.";
+    }
+
+    if (!formData.chargedPerVisit || formData.chargedPerVisit <= 0) {
+      newErrors.chargedPerVisit =
+        "Charged per visit must be a positive number.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Check if doctor profile exists
   const checkProfile = async () => {
@@ -30,16 +56,11 @@ function AdminAddDoctor() {
         `/${username}/admin/doctorProfile?doctorUsername=${doctorUsername}`
       );
 
-      if (response.data === "Create profile") {
-        alert("No profile exists. Proceed to create one.");
-        setDoctorProfile(null); // No profile exists
-      } else {
-        alert("Profile already exists. Cannot add a new profile.");
-        setDoctorProfile(response.data); // Existing profile
-      }
+      alert("Profile already exists. Cannot add a new profile.");
+      setDoctorProfile(response.data);
     } catch (error) {
       console.error("Error checking profile:", error);
-      alert("Error fetching profile. Please try again.");
+      alert("No profile with this username. You can proceed to add one.");
     } finally {
       setLoading(false);
     }
@@ -55,6 +76,11 @@ function AdminAddDoctor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      alert("Please fill out all required fields correctly.");
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await axios.post(
@@ -62,9 +88,7 @@ function AdminAddDoctor() {
         formData
       );
 
-      alert(
-        "Profile added successfully! Check the email for the doctor ID."
-      );
+      alert("Profile added successfully! Check the email for the doctor ID.");
       setFormData({
         name: "",
         specialization: "",
@@ -73,6 +97,7 @@ function AdminAddDoctor() {
         mobileNo: "",
         chargedPerVisit: "",
       });
+      setErrors({});
     } catch (error) {
       console.error("Error adding profile:", error);
       alert("Error adding profile. Please try again.");
@@ -102,12 +127,24 @@ function AdminAddDoctor() {
       {doctorProfile && (
         <div className="profile-details">
           <h3>Profile Details</h3>
-          <p><strong>Name:</strong> {doctorProfile.name}</p>
-          <p><strong>Specialization:</strong> {doctorProfile.specialization}</p>
-          <p><strong>Location:</strong> {doctorProfile.location}</p>
-          <p><strong>Hospital Name:</strong> {doctorProfile.hospitalName}</p>
-          <p><strong>Mobile No:</strong> {doctorProfile.mobileNo}</p>
-          <p><strong>Charged per Visit:</strong> {doctorProfile.chargedPerVisit}</p>
+          <p>
+            <strong>Name:</strong> {doctorProfile.name}
+          </p>
+          <p>
+            <strong>Specialization:</strong> {doctorProfile.specialization}
+          </p>
+          <p>
+            <strong>Location:</strong> {doctorProfile.location}
+          </p>
+          <p>
+            <strong>Hospital Name:</strong> {doctorProfile.hospitalName}
+          </p>
+          <p>
+            <strong>Mobile No:</strong> {doctorProfile.mobileNo}
+          </p>
+          <p>
+            <strong>Charged per Visit:</strong> {doctorProfile.chargedPerVisit}
+          </p>
         </div>
       )}
 
@@ -123,8 +160,8 @@ function AdminAddDoctor() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                required
               />
+              {errors.name && <p className="error">{errors.name}</p>}
             </div>
             <div>
               <label>Specialization:</label>
@@ -133,8 +170,10 @@ function AdminAddDoctor() {
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleInputChange}
-                required
               />
+              {errors.specialization && (
+                <p className="error">{errors.specialization}</p>
+              )}
             </div>
             <div>
               <label>Location:</label>
@@ -161,8 +200,8 @@ function AdminAddDoctor() {
                 name="mobileNo"
                 value={formData.mobileNo}
                 onChange={handleInputChange}
-                required
               />
+              {errors.mobileNo && <p className="error">{errors.mobileNo}</p>}
             </div>
             <div>
               <label>Charged per Visit:</label>
@@ -172,6 +211,9 @@ function AdminAddDoctor() {
                 value={formData.chargedPerVisit}
                 onChange={handleInputChange}
               />
+              {errors.chargedPerVisit && (
+                <p className="error">{errors.chargedPerVisit}</p>
+              )}
             </div>
             <button type="submit" disabled={loading}>
               {loading ? "Adding Profile..." : "Add Profile"}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "../../services/api";
+// import "../../CSS/AddDoctor.css";
 
 function AdminUpdateDoctor() {
   const [username, setUsername] = useState("");
@@ -14,7 +15,7 @@ function AdminUpdateDoctor() {
     }
     try {
       setLoading(true);
-      const response = await axios.get(`/${username}/doctor/viewProfile`);
+      const response = await axios.get(`doctor/${username}/viewProfile`);
       setDoctorProfile(response.data);
     } catch (error) {
       alert("Error fetching profile. Please check the username.");
@@ -35,7 +36,7 @@ function AdminUpdateDoctor() {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.put(`/${username}/doctor/updateProfile`, doctorProfile);
+      await axios.put(`/doctor/${username}/updateProfile`, doctorProfile);
       alert("Profile updated successfully.");
     } catch (error) {
       alert("Error updating profile. Please try again.");
@@ -56,7 +57,7 @@ function AdminUpdateDoctor() {
           <div className="search-container">
             <input
               type="text"
-              placeholder="Enter Username"
+              placeholder="Enter Doctor Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />

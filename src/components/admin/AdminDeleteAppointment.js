@@ -13,7 +13,11 @@ function AdminDeleteAppointment() {
         const response = await axios.get(
           `${localStorage.getItem("username")}/admin/appointments`
         );
-        setAppointments(response.data);
+        // Filter only pending appointments
+        const pendingAppointments = response.data.filter(
+          (appointment) => appointment.status === "pending"
+        );
+        setAppointments(pendingAppointments);
       } catch (error) {
         console.error("Error fetching appointments:", error);
       } finally {
@@ -29,13 +33,15 @@ function AdminDeleteAppointment() {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
       try {
         await axios.delete(
-          `${localStorage.getItem("username")}/admin/appointments/${appointmentId}`
+          `${localStorage.getItem("username")}/admin/appointmentDelete/${appointmentId}`
         );
         alert("Appointment deleted successfully!");
 
         // Remove the deleted appointment from the local state
         setAppointments((prevAppointments) =>
-          prevAppointments.filter((appointment) => appointment.id !== appointmentId)
+          prevAppointments.filter(
+            (appointment) => appointment.appointmentId !== appointmentId
+          )
         );
       } catch (error) {
         console.error("Error deleting appointment:", error);
@@ -46,9 +52,11 @@ function AdminDeleteAppointment() {
 
   return (
     <div className="admin-delete-appointment">
-      <h2>Admin Manage Appointments</h2>
+      <h2>Admin Manage Pending Appointments</h2>
       {isLoading ? (
         <p>Loading appointments...</p>
+      ) : appointments.length === 0 ? (
+        <p>No pending appointments available.</p>
       ) : (
         <table className="appointments-table">
           <thead>
@@ -61,30 +69,22 @@ function AdminDeleteAppointment() {
             </tr>
           </thead>
           <tbody>
-            {appointments.length === 0 ? (
-              <tr>
-                <td colSpan="5" style={{ textAlign: "center" }}>
-                  No appointments available.
+            {appointments.map((appointment) => (
+              <tr key={appointment.appointmentId}>
+                <td>{appointment.appointmentId}</td>
+                <td>Dr. {appointment.doctor.name}</td>
+                <td>{appointment.patient.name}</td>
+                <td>{appointment.appointmentDateTime}</td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(appointment.appointmentId)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
-            ) : (
-              appointments.map((appointment) => (
-                <tr key={appointment.id}>
-                  <td>{appointment.id}</td>
-                  <td>{appointment.doctorName}</td>
-                  <td>{appointment.patientName}</td>
-                  <td>{appointment.dateTime}</td>
-                  <td>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(appointment.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       )}

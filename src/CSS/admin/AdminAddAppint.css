@@ -7,6 +7,13 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  display: block;
+}
+
 input[type="number"] {
   width: 100%; /* Increase width of the number input field */
   padding: 8px;

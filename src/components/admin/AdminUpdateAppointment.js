@@ -1,19 +1,38 @@
 import React, { useState } from "react";
 import axios from "../../services/api"; // Ensure correct path for admin API service
 import "../../CSS/admin/AdminUpdateAppoint.css";
+
 function AdminUpdateAppointment() {
   const [appointmentId, setAppointmentId] = useState("");
   const [doctorId, setDoctorId] = useState("");
   const [appointmentDateTime, setAppointmentDateTime] = useState("");
   const [reason, setReason] = useState("");
+  const [error, setError] = useState(""); // To handle form validation errors
+
+  const validateForm = () => {
+    // Check for empty or invalid fields
+    if (!appointmentId || !doctorId || !appointmentDateTime || !reason) {
+      return "All fields are required.";
+    }
+    if (isNaN(appointmentId) || isNaN(doctorId)) {
+      return "Appointment ID and Doctor ID must be numeric.";
+    }
+    return ""; // No errors
+  };
 
   const handleUpdate = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError); // Set the error message if validation fails
+      return;
+    }
+
     const data = { doctorId, appointmentDateTime, reason };
     try {
       await axios.put(
         `${localStorage.getItem(
           "username"
-        )}/admin/appointments/${appointmentId}`,
+        )}/admin/appointmentUpdate/${appointmentId}`,
         data
       );
       alert("Appointment updated successfully!");
@@ -21,6 +40,7 @@ function AdminUpdateAppointment() {
       setDoctorId("");
       setAppointmentDateTime("");
       setReason("");
+      setError(""); // Clear any validation error on success
     } catch (error) {
       console.error("Error updating appointment:", error);
       alert("Failed to update appointment. Please try again.");
@@ -31,6 +51,8 @@ function AdminUpdateAppointment() {
     <div className="admin-update-appointment">
       <h2>Admin Update Appointment</h2>
       <form className="appointment-form">
+        {error && <div className="error-message">{error}</div>}{" "}
+        {/* Show validation error message */}
         <label>Appointment ID:</label>
         <input
           type="text"

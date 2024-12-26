@@ -13,9 +13,39 @@ function AdminAddPatient() {
     age: "",
     address: "",
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const username = localStorage.getItem("username"); // Admin's username
+
+  // Validation helper functions
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name || !/^[a-zA-Z\s]+$/.test(formData.name)) {
+      newErrors.name = "Name must contain only letters and cannot be empty.";
+    }
+
+    if (!formData.mobileNo || !/^\d{10}$/.test(formData.mobileNo)) {
+      newErrors.mobileNo = "Mobile number must be exactly 10 digits.";
+    }
+
+    if (!formData.bloodGroup || !/^(A|B|AB|O)[+-]$/.test(formData.bloodGroup)) {
+      newErrors.bloodGroup =
+        "Blood group must be in a valid format (e.g., A+).";
+    }
+
+    if (!formData.age || formData.age <= 0 || formData.age > 120) {
+      newErrors.age = "Age must be a number between 1 and 120.";
+    }
+
+    if (!formData.address || formData.address.length < 10) {
+      newErrors.address = "Address must be at least 10 characters long.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Check if patient profile exists
   const checkProfile = async () => {
@@ -55,6 +85,11 @@ function AdminAddPatient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      alert("Please fill out all fields correctly before submitting.");
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await axios.post(
@@ -71,6 +106,7 @@ function AdminAddPatient() {
         age: "",
         address: "",
       });
+      setErrors({});
     } catch (error) {
       console.error("Error adding profile:", error);
       alert("Error adding profile. Please try again.");
@@ -133,8 +169,8 @@ function AdminAddPatient() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                required
               />
+              {errors.name && <p className="error">{errors.name}</p>}
             </div>
             <div>
               <label>Mobile Number:</label>
@@ -143,8 +179,8 @@ function AdminAddPatient() {
                 name="mobileNo"
                 value={formData.mobileNo}
                 onChange={handleInputChange}
-                required
               />
+              {errors.mobileNo && <p className="error">{errors.mobileNo}</p>}
             </div>
             <div>
               <label>Blood Group:</label>
@@ -154,6 +190,9 @@ function AdminAddPatient() {
                 value={formData.bloodGroup}
                 onChange={handleInputChange}
               />
+              {errors.bloodGroup && (
+                <p className="error">{errors.bloodGroup}</p>
+              )}
             </div>
             <div>
               <label>Gender:</label>
@@ -167,7 +206,7 @@ function AdminAddPatient() {
                 <option value="OTHERS">Others</option>
               </select>
             </div>
-            <div className="age">
+            <div>
               <label>Age:</label>
               <input
                 type="number"
@@ -175,6 +214,7 @@ function AdminAddPatient() {
                 value={formData.age}
                 onChange={handleInputChange}
               />
+              {errors.age && <p className="error">{errors.age}</p>}
             </div>
             <div>
               <label>Address:</label>
@@ -183,6 +223,7 @@ function AdminAddPatient() {
                 value={formData.address}
                 onChange={handleInputChange}
               />
+              {errors.address && <p className="error">{errors.address}</p>}
             </div>
             <button type="submit" disabled={loading}>
               {loading ? "Adding Profile..." : "Add Profile"}

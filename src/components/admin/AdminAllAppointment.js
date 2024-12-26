@@ -8,8 +8,9 @@ function AdminAllAppointment() {
 
   useEffect(() => {
     // Fetch appointments from the backend
+    const username = localStorage.getItem("username"); // Fetch the logged-in username
     axios
-      .get(`${localStorage.getItem("username")}/admin/appointments`)
+      .get(`/${username}/admin/appointments`)
       .then((response) => {
         setAppointments(response.data);
       })
@@ -18,20 +19,6 @@ function AdminAllAppointment() {
       })
       .finally(() => setIsLoading(false));
   }, []);
-
-  const handleDelete = (appointmentId) => {
-    if (window.confirm("Are you sure you want to delete this appointment?")) {
-      axios
-        .delete(`/admin/appointments/${appointmentId}`)
-        .then(() => {
-          alert("Appointment deleted successfully!");
-          setAppointments(appointments.filter((appt) => appt.id !== appointmentId));
-        })
-        .catch((error) => {
-          console.error("Error deleting appointment:", error);
-        });
-    }
-  };
 
   return (
     <div className="admin-all-appointments">
@@ -43,42 +30,27 @@ function AdminAllAppointment() {
           <thead>
             <tr>
               <th>Appointment ID</th>
-              <th>Doctor Name</th>
-              <th>Patient Name</th>
+              <th>Doctor ID</th>
+              <th>Patient ID</th>
               <th>Appointment Date & Time</th>
               <th>Reason</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan="7">No appointments available.</td>
+                <td colSpan="6">No appointments available.</td>
               </tr>
             ) : (
               appointments.map((appointment) => (
-                <tr key={appointment.id}>
-                  <td>{appointment.id}</td>
-                  <td>{appointment.doctorName}</td>
-                  <td>{appointment.patientName}</td>
-                  <td>{appointment.dateTime}</td>
+                <tr key={appointment.appointmentId}>
+                  <td>{appointment.appointmentId}</td>
+                  <td>{appointment.doctor.doctorId}</td>
+                  <td>{appointment.patient.patientId}</td>
+                  <td>{appointment.appointmentDateTime}</td>
                   <td>{appointment.reason}</td>
                   <td>{appointment.status}</td>
-                  <td>
-                    <button
-                      className="update-btn"
-                      onClick={() => alert("Update functionality coming soon!")}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(appointment.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
                 </tr>
               ))
             )}

@@ -45,7 +45,7 @@ function AllDoctors() {
                 <td>{doctor.location}</td>
                 <td>{doctor.hospitalName}</td>
                 <td>{doctor.mobileNo}</td>
-                <td>{doctor.chargePerVisit}</td>
+                <td>{doctor.chargedPerVisit}</td>
               </tr>
             ))}
           </tbody>

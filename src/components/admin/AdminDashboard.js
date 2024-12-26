@@ -119,14 +119,10 @@ function AdminDashboard() {
                     <Link to="/admin-addappointment">Add Appointment</Link>
                   </li>
                   <li>
-                    <Link to="/admin-updateappointment">
-                      Update Appointment
-                    </Link>
+                    <Link to="/admin-updateappointment">Update Appointment</Link>
                   </li>
                   <li>
-                    <Link to="/admin-deleteappointment">
-                      Delete Appointment
-                    </Link>
+                    <Link to="/admin-deleteappointment">Delete Appointment</Link>
                   </li>
                   <li>
                     <Link to="/admin-allappointments">All Appointments</Link>
@@ -169,9 +165,9 @@ function AdminDashboard() {
       {/* Background Section Below Navbar */}
       <div className="dashboard-content">
         <h2>Welcome to the Admin Dashboard</h2>
-        <pre>
+        <div>
           Manage patients, view doctor details, track status, and much more
-        </pre>
+        </div>
         <br />
         <p>
           You can navigate through the available sections in the navbar above to

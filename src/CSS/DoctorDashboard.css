@@ -1,6 +1,6 @@
 /* Styling for the dashboard content */
 .dashboard-content {
-  background-image: url('/public/images/bg3.jpg'); /* Replace with the correct path */
+  background-image: url("/public/images/bg3.jpg"); /* Replace with the correct path */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -34,9 +34,14 @@
   word-wrap: break-word; /* Ensures long lines break correctly */
   margin: 20px 0;
   color: #000000; /* Matching the color with other text */
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   line-height: 1.6;
-  background-color: rgba(255, 253, 253, 0.6); /* A light background to contrast the text */
+  background-color: rgba(
+    255,
+    253,
+    253,
+    0.6
+  ); /* A light background to contrast the text */
   padding: 15px;
   border-radius: 8px;
 }

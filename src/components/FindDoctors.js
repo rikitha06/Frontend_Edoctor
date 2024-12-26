@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "../services/api";
 import "../CSS/FindDoctors.css";
 
@@ -8,10 +8,12 @@ function FindDoctors() {
   const [searchName, setSearchName] = useState("");
   const [searchSpecialization, setSearchSpecialization] = useState("");
   const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [errors, setErrors] = useState({});
   const username = localStorage.getItem("username");
 
   // Fetch all doctors
   const fetchAllDoctors = async () => {
+    setErrors({});
     try {
       const response = await axios.get(`/${username}/patient/findDoctors`);
       setDoctors(response.data);
@@ -24,20 +26,22 @@ function FindDoctors() {
 
   // Fetch doctors by Name
   const fetchDoctorsByName = async () => {
-    if (searchName.trim() === "") {
-      alert("Please enter a doctor's name.");
+    if (!searchName.trim()) {
+      setErrors({ searchName: "Doctor name is required." });
       return;
     }
-
+    setErrors({});
     setFilteredDoctors([]);
     setSearchSpecialization("");
 
     try {
-      const response = await axios.get(`/${username}/patient/findDoctorsByName?doctorName=${searchName}`);
+      const response = await axios.get(
+        `/${username}/patient/findDoctorsByName?doctorName=${searchName}`
+      );
       if (response.data && response.data.length > 0) {
         setFilteredDoctors(response.data);
       } else {
-        setFilteredDoctors([]); // No doctors found, so clear results
+        setFilteredDoctors([]);
         alert("No doctors found for the given name.");
       }
     } catch (error) {
@@ -48,20 +52,22 @@ function FindDoctors() {
 
   // Fetch doctors by Specialization
   const fetchDoctorsBySpecialization = async () => {
-    if (searchSpecialization.trim() === "") {
-      alert("Please enter a specialization.");
+    if (!searchSpecialization.trim()) {
+      setErrors({ searchSpecialization: "Specialization is required." });
       return;
     }
-
+    setErrors({});
     setFilteredDoctors([]);
     setSearchName("");
 
     try {
-      const response = await axios.get(`/${username}/patient/findDoctorsBySpecialization?specialization=${searchSpecialization}`);
+      const response = await axios.get(
+        `/${username}/patient/findDoctorsBySpecialization?specialization=${searchSpecialization}`
+      );
       if (response.data && response.data.length > 0) {
         setFilteredDoctors(response.data);
       } else {
-        setFilteredDoctors([]); // No doctors found, so clear results
+        setFilteredDoctors([]);
         alert("No doctors found for the selected specialization.");
       }
     } catch (error) {
@@ -74,12 +80,9 @@ function FindDoctors() {
     <div className="find-doctors-page">
       <h2>Find Doctors</h2>
 
-      {/* Options to find doctors */}
       <div className="fetch-options">
-        {/* Find all doctors */}
         <button onClick={fetchAllDoctors}>View All Doctors</button>
 
-        {/* Find doctors by name */}
         <div className="search-section">
           <label>Enter Name:</label>
           <input
@@ -88,10 +91,10 @@ function FindDoctors() {
             onChange={(e) => setSearchName(e.target.value)}
             placeholder="Enter Name"
           />
+          {errors.searchName && <p className="error">{errors.searchName}</p>}
           <button onClick={fetchDoctorsByName}>Search Doctor by Name</button>
         </div>
 
-        {/* Find doctors by specialization */}
         <div className="search-section">
           <label>Enter Specialization:</label>
           <input
@@ -100,26 +103,40 @@ function FindDoctors() {
             onChange={(e) => setSearchSpecialization(e.target.value)}
             placeholder="Enter Specialization"
           />
-          <button onClick={fetchDoctorsBySpecialization}>Search Doctor by Specialization</button>
+          {errors.searchSpecialization && (
+            <p className="error">{errors.searchSpecialization}</p>
+          )}
+          <button onClick={fetchDoctorsBySpecialization}>
+            Search Doctor by Specialization
+          </button>
         </div>
       </div>
 
-      {/* Display doctors in card format */}
       <div className="doctor-cards-container">
         {filteredDoctors.length > 0 ? (
           filteredDoctors.map((doctor) => (
             <div className="doctor-card" key={doctor.doctorId}>
               <h3>Dr. {doctor.name}</h3>
-              <p><strong>Specialization:</strong> {doctor.specialization}</p>
-              <p><strong>Location:</strong> {doctor.location}</p>
-              <p><strong>Hospital:</strong> {doctor.hospitalName}</p>
-              <p><strong>Charge Per Visit:</strong> ₹{doctor.chargedPerVisit}</p>
+              <p>
+                <strong>Specialization:</strong> {doctor.specialization}
+              </p>
+              <p>
+                <strong>Location:</strong> {doctor.location}
+              </p>
+              <p>
+                <strong>Hospital:</strong> {doctor.hospitalName}
+              </p>
+              <p>
+                <strong>Charge Per Visit:</strong> ₹{doctor.chargedPerVisit}
+              </p>
               <Link to={`/doctor-details/${doctor.doctorId}`}>
                 <button>Get Details</button>
               </Link>
             </div>
           ))
-        ) : null}
+        ) : (
+          <p>No doctors to display.</p>
+        )}
       </div>
     </div>
   );
